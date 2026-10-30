@@ -13,19 +13,32 @@
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
         
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 120px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
         .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
 
         #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 18px; border-radius: 8px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; }
         #free-trial-box input[type="email"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; max-width: 340px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 8px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
+        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 6px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
         #free-trial-box button { background: #2e7d32; color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 14px; transition: background 0.2s; }
         #free-trial-box button:hover { background: #1b5e20; }
 
         #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; }
 
-        .form-section { margin-top: 20px; display: flex; flex-direction: column; gap: 18px; }
+        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; }
+        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .pro-banner button:hover { background: #e0a800; }
+
+        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+        .pack-btn { background: #28a745; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .pack-btn:hover { background: #218838; }
+        .pack-btn.pro-unlimited { background: #007bff; }
+        .pack-btn.pro-unlimited:hover { background: #0056b3; }
+
+        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
+        .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
+
+        .form-section { margin-top: 20px; display: flex; flex-direction: column; gap: 18px; background: #fafafa; border: 1px solid #e9ecef; padding: 20px; border-radius: 8px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .form-group label { font-size: 14px; font-weight: 600; color: #2d3748; }
         .form-group select, .form-group input[type="file"] { padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #fff; color: #2d3748; }
@@ -33,15 +46,7 @@
         button.btn-primary { background: #111; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; }
         button.btn-primary:hover { background: #333; }
 
-        .stripe-packs-box { display: none; margin-top: 20px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 20px; border-radius: 10px; text-align: center; }
-        .stripe-packs-box h4 { margin: 0 0 8px 0; color: #f57f17; font-size: 15px; }
-        .pack-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
-        .pack-buttons button { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .pack-buttons button:hover { background: #218838; }
-        .pack-buttons button.pro-btn { background: #007bff; }
-        .pack-buttons button.pro-btn:hover { background: #0056b3; }
-
-        .result-box { margin-top: 25px; display: none; background: #fafafa; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; text-align: center; }
+        .result-box { margin-top: 25px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 10px; text-align: center; }
         .result-box img { max-width: 100%; border-radius: 8px; margin-top: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); max-height: 500px; object-fit: contain; }
     </style>
 </head>
@@ -55,14 +60,14 @@
             
             <!-- Box Accesso / Prova Gratuita in stile Bussola -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🎁 PROVA GRATUITA 2 CREDITI / ACCESSO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🎁 PROVA GRATUITA 2 CREDITI / SIMULAZIONI</div>
                 
                 <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
+                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email...">
                     
                     <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
-                        <input type="number" id="captcha-input" placeholder="?" style="width: 50px; padding: 5px; text-align: center;">
+                        <input type="number" id="captcha-input" placeholder="?" style="width: 50px; text-align: center;">
                     </div>
                     
                     <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; max-width: 360px;">
@@ -80,20 +85,36 @@
                 </div>
 
                 <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
-
-                <div style="margin-top: 15px;">
-                    <a href="#" onclick="mostraLoginModal(event)" style="color: #0056b3; text-decoration: underline; font-weight: bold; font-size: 13px;">Hai già un account? Accedi con Password</a>
-                </div>
             </div>
 
-            <!-- Stato Utente Loggato & Crediti Residui (Stile Bussola) -->
+            <!-- Banner PRO in stile Bussola -->
+            <div class="pro-banner">
+                <span>🔒 Visual AI & Simulazione Avanzata (Funzione PRO)</span>
+                <button onclick="scrollToPacks()">Scopri i Piani PRO</button>
+            </div>
+
+            <!-- Pulsanti Pack a Pagamento Stripe -->
+            <div class="pack-buttons-container">
+                <button class="pack-btn" onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
+                <button class="pack-btn" onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
+                <button class="pack-btn" onclick="avviaCheckout('pack_3')">Pack 3 (150€)</button>
+                <button class="pack-btn pro-unlimited" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
+            </div>
+
+            <!-- Link di Accesso / Password Dimenticata -->
+            <div class="auth-links">
+                <a href="#" onclick="mostraLoginModal(event)">Hai già un account? Accedi qui</a>
+                <a href="#" onclick="mostraResetPasswordModal(event)" style="color: #d9534f;">Password dimenticata?</a>
+            </div>
+
+            <!-- Stato Utente Loggato & Crediti Residui -->
             <div id="infix-user-status">
                 <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
                         Crediti Residui: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
                     </span>
-                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;" title="Esci">Esci 🚪</button>
+                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
                 </div>
             </div>
         </div>
@@ -147,18 +168,6 @@
             </div>
 
             <button class="btn-primary" id="generateBtn" onclick="eseguiElaborazioneVisuale()">Genera Simulazione Visual INFIX® 🎨</button>
-        </div>
-
-        <!-- Box Sblocco Pacchetti Stripe (Si attiva quando i crediti sono 0) -->
-        <div id="stripePaywallBox" class="stripe-packs-box">
-            <h4 id="paywall-title">⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
-            <p style="font-size: 13px; color: #666; margin: 6px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto:</p>
-            <div class="pack-buttons">
-                <button onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
-                <button onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
-                <button onclick="avviaCheckout('pack_3')">Pack 3 (150€)</button>
-                <button class="pro-btn" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
-            </div>
         </div>
 
         <!-- Risultato Simulazione -->
@@ -222,10 +231,9 @@
 
             if (emailLower !== 'infix@outlook.it' && parseInt(displayCredits) <= 0) {
                 document.getElementById('visual-app-body').style.display = 'none';
-                document.getElementById('stripePaywallBox').style.display = 'block';
+                alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento qui sotto per continuare.");
             } else {
                 document.getElementById('visual-app-body').style.display = 'flex';
-                document.getElementById('stripePaywallBox').style.display = 'none';
             }
         }
 
@@ -263,7 +271,7 @@
             const errorMsg = document.getElementById('trial-error-msg');
 
             if (!otp) {
-                errorMsg.style.color = '#dc3545';
+                errorMsg.style.color = '#d9534f';
                 errorMsg.innerText = "Inserisci un codice OTP valido.";
                 errorMsg.style.display = 'block';
                 return;
@@ -281,6 +289,8 @@
 
         function mostraLoginModal(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'flex'; }
         function chiudiLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
+        function mostraResetPasswordModal(e) { e.preventDefault(); alert("Contatta l'assistenza INFIX® per il reset rapido della password."); }
+        function scrollToPacks() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
 
         function eseguiLogin() {
             const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -308,8 +318,8 @@
                 let numCredits = parseInt(credits);
                 if (isNaN(numCredits) || numCredits <= 0) {
                     document.getElementById('visual-app-body').style.display = 'none';
-                    document.getElementById('stripePaywallBox').style.display = 'block';
-                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento per continuare.");
+                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento qui sotto per continuare.");
+                    scrollToPacks();
                     return;
                 }
                 numCredits--;
@@ -318,7 +328,7 @@
 
                 if (numCredits <= 0) {
                     document.getElementById('visual-app-body').style.display = 'none';
-                    document.getElementById('stripePaywallBox').style.display = 'block';
+                    scrollToPacks();
                 }
             }
 
