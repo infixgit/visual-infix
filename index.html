@@ -6,45 +6,40 @@
     <title>Visual INFIX® - Simulatore Visivo Professionale</title>
     
     <link rel="icon" href="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg">
-    <meta name="theme-color" content="#111111">
+    <meta name="theme-color" content="#ffffff">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 750px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
+        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
         
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
-        .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
+        .header p { color: #666; font-size: 0.95rem; margin: 5px 0 0 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 18px; border-radius: 8px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; }
-        #free-trial-box input[type="email"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; max-width: 340px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 6px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-        #free-trial-box button { background: #2e7d32; color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 14px; transition: background 0.2s; }
-        #free-trial-box button:hover { background: #1b5e20; }
+        #free-trial-box { background: #fcfdfc; border: 1px solid #d4edda; padding: 22px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #155724; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        #free-trial-box input[type="email"] { padding: 10px 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; max-width: 340px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; }
+        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 6px 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; text-align: center; }
+        
+        .btn-green { background: #28a745; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 14px; transition: background 0.2s; }
+        .btn-green:hover { background: #218838; }
 
         #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; }
 
-        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; }
-        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .pro-banner button:hover { background: #e0a800; }
-
-        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
-        .pack-btn { background: #28a745; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .pack-btn:hover { background: #218838; }
-        .pack-btn.pro-unlimited { background: #007bff; }
-        .pack-btn.pro-unlimited:hover { background: #0056b3; }
-
-        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
-        .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
-
-        .form-section { margin-top: 20px; display: flex; flex-direction: column; gap: 18px; background: #fafafa; border: 1px solid #e9ecef; padding: 20px; border-radius: 8px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+        .form-section { margin-top: 25px; display: flex; flex-direction: column; gap: 20px; border-top: 2px solid #e9ecef; padding-top: 25px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
         .form-group label { font-size: 14px; font-weight: 600; color: #2d3748; }
         .form-group select, .form-group input[type="file"] { padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #fff; color: #2d3748; }
 
-        button.btn-primary { background: #111; color: white; border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; }
+        button.btn-primary { background: #111; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; }
         button.btn-primary:hover { background: #333; }
+
+        .stripe-packs-box { display: none; margin-top: 25px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 20px; border-radius: 10px; text-align: center; }
+        .stripe-packs-box h4 { margin: 0 0 8px 0; color: #f57f17; font-size: 15px; }
+        .pack-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+        .pack-buttons button { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .pack-buttons button:hover { background: #218838; }
+        .pack-buttons button.pro-btn { background: #007bff; }
+        .pack-buttons button.pro-btn:hover { background: #0056b3; }
 
         .result-box { margin-top: 25px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 10px; text-align: center; }
         .result-box img { max-width: 100%; border-radius: 8px; margin-top: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); max-height: 500px; object-fit: contain; }
@@ -54,57 +49,40 @@
 
     <div class="card">
         <div class="header">
-            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Accesso / Prova Gratuita in stile Bussola -->
+            <!-- Box Accesso / Prova Gratuita pulito -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🎁 PROVA GRATUITA 2 CREDITI / SIMULAZIONI</div>
+                <div style="font-weight: bold; margin-bottom: 12px; font-size: 15px; color: #155724;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
                 <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email...">
+                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
                     
                     <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
-                        <input type="number" id="captcha-input" placeholder="?" style="width: 50px; text-align: center;">
+                        <input type="number" id="captcha-input" placeholder="?">
                     </div>
                     
                     <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; max-width: 360px;">
                         <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
-                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa sulla privacy e il trattamento dei dati.</label>
+                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
                     </div>
                     
-                    <button id="send-otp-btn" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
+                    <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
                 <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px;">
-                    <p style="font-size: 14px; color: #1b5e20; margin: 0;">Codice OTP inviato da infixserramenti@gmail.it a <strong id="sent-email-label"></strong>.</p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 3px; font-weight: bold; width: 220px; padding: 10px;">
-                    <button onclick="verificaCodiceOtpEAccedi()" style="background: #1b5e20;">Verifica e Accedi 🚀</button>
+                    <p style="font-size: 14px; color: #155724; margin: 0;">Codice OTP inviato da infixserramenti@gmail.it a <strong id="sent-email-label"></strong>.</p>
+                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 200px; padding: 10px;">
+                    <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
-            </div>
+                <div id="trial-error-msg" style="color: #dc3545; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
 
-            <!-- Banner PRO in stile Bussola -->
-            <div class="pro-banner">
-                <span>🔒 Visual AI & Simulazione Avanzata (Funzione PRO)</span>
-                <button onclick="scrollToPacks()">Scopri i Piani PRO</button>
-            </div>
-
-            <!-- Pulsanti Pack a Pagamento Stripe -->
-            <div class="pack-buttons-container">
-                <button class="pack-btn" onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
-                <button class="pack-btn" onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
-                <button class="pack-btn" onclick="avviaCheckout('pack_3')">Pack 3 (150€)</button>
-                <button class="pack-btn pro-unlimited" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
-            </div>
-
-            <!-- Link di Accesso / Password Dimenticata -->
-            <div class="auth-links">
-                <a href="#" onclick="mostraLoginModal(event)">Hai già un account? Accedi qui</a>
-                <a href="#" onclick="mostraResetPasswordModal(event)" style="color: #d9534f;">Password dimenticata?</a>
+                <div style="margin-top: 15px;">
+                    <a href="#" onclick="mostraLoginModal(event)" style="color: #0056b3; text-decoration: underline; font-weight: bold; font-size: 13px;">Hai già un account? Accedi con Password</a>
+                </div>
             </div>
 
             <!-- Stato Utente Loggato & Crediti Residui -->
@@ -114,60 +92,75 @@
                     <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
                         Crediti Residui: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
                     </span>
-                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
+                    <button onclick="eseguiLogout()" style="background: #dc3545; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
                 </div>
             </div>
         </div>
 
-        <!-- Form Simulatore Visivo INFIX® -->
+        <!-- Form Simulatore Visivo INFIX® Completo di Categorie -->
         <div id="visual-app-body" style="display: none;" class="form-section">
             <div class="form-group">
-                <label>1. Scatta o carica la foto dello stato di fatto</label>
+                <label>1. Scatta o carica la foto dello stato attuale</label>
                 <input type="file" id="visualPhotoInput" accept="image/*">
             </div>
 
             <div class="form-group">
-                <label>2. Seleziona il prodotto INFIX® da applicare</label>
+                <label>2. Seleziona la Categoria INFIX®</label>
                 <select id="productSelect">
                     <optgroup label="Serramenti & Vetrate">
-                        <option value="finestra_pvc">Finestra / Portafinestra in PVC Isolante</option>
-                        <option value="finestra_alluminio">Serramento in Alluminio a Taglio Termico</option>
-                        <option value="scorrevole_alzatante">Scorrevole Alzantante Panoramico</option>
+                        <option value="serramento">Serramento / Finestra / Scorrevole</option>
                         <option value="porta_interna">Porta Interna (Pantografata / Filomuro / Scorrevole)</option>
                     </optgroup>
-                    <optgroup label="Ingressi & Portoncini">
+                    <optgroup label="Portoncini & Ingressi">
                         <option value="portoncino_alluminio">Portoncino d'Ingresso in Alluminio</option>
                         <option value="portoncino_pvc">Portoncino d'Ingresso in PVC</option>
-                        <option value="blindato">Porta Blindata di Sicurezza Certificata</option>
+                        <option value="blindato">Portoncino Blindato di Sicurezza</option>
                     </optgroup>
-                    <optgroup label="Garage & Chiusure">
-                        <option value="sezionale">Portone Sezionale Coibentato per Garage</option>
+                    <optgroup label="Chiusure Garage & Grandi Aperture">
+                        <option value="sezionale">Portone Sezionale</option>
                         <option value="basculante">Portone Basculante</option>
                     </optgroup>
-                    <optgroup label="Schermature & Oscuranti">
+                    <optgroup label="Oscuranti & Schermature">
                         <option value="persiana">Persiana / Scurone (Alluminio / PVC / Legno)</option>
-                        <option value="tapparella">Tapparella Avvolgibile Coibentata</option>
-                        <option value="cassonetto">Cassonetto Isolato Copriforo / Restauro</option>
-                        <option value="zanzariera">Zanzariera Plissettata / Incasso</option>
+                        <option value="balcone">Antone / Balcone</option>
+                        <option value="tapparella">Tapparella / Avvolgibile (Alluminio / Acciaio / PVC)</option>
+                        <option value="cassonetto">Cassonetto Copriforo / Restauro Isolante</option>
+                    </optgroup>
+                    <optgroup label="Protezioni & Accessori">
+                        <option value="zanzariera">Zanzariera (Plissettata / Rullo / Incasso)</option>
+                        <option value="frangisole">Frangisole / Schermatura Solare</option>
+                        <option value="inferriata">Grata di Sicurezza / Inferriata</option>
                     </optgroup>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>3. Scegli la Finitura / Colore</label>
+                <label>3. Scegli Finitura / Colore INFIX®</label>
                 <select id="finishSelect">
                     <option value="ral9010">Bianco Puro RAL 9010</option>
-                    <option value="ral7016">Grigio Antracite Opaco RAL 7016</option>
+                    <option value="ral7016">Grigio Antracite RAL 7016</option>
                     <option value="ral6005">Verde Persiana RAL 6005</option>
                     <option value="ral8017">Marrone Testa di Moro RAL 8017</option>
-                    <option value="noce">Legno Effetto Noce Nazionale</option>
+                    <option value="noce">Legno Effetto Noce</option>
                     <option value="rovere">Legno Effetto Rovere / Quercia</option>
                     <option value="nero">Nero Opaco Moderno</option>
-                    <option value="argento">Alluminio Anodizzato Argento</option>
+                    <option value="argento">Alluminio Anodizzato / Argento</option>
                 </select>
             </div>
 
             <button class="btn-primary" id="generateBtn" onclick="eseguiElaborazioneVisuale()">Genera Simulazione Visual INFIX® 🎨</button>
+        </div>
+
+        <!-- Box Sblocco Pacchetti Stripe (Si attiva quando i crediti sono 0) -->
+        <div id="stripePaywallBox" class="stripe-packs-box">
+            <h4>⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
+            <p style="font-size: 13px; color: #666; margin: 6px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto:</p>
+            <div class="pack-buttons">
+                <button onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
+                <button onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
+                <button onclick="avviaCheckout('pack_3')">Pack 3 (150€)</button>
+                <button class="pro-btn" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
+            </div>
         </div>
 
         <!-- Risultato Simulazione -->
@@ -231,9 +224,10 @@
 
             if (emailLower !== 'infix@outlook.it' && parseInt(displayCredits) <= 0) {
                 document.getElementById('visual-app-body').style.display = 'none';
-                alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento qui sotto per continuare.");
+                document.getElementById('stripePaywallBox').style.display = 'block';
             } else {
                 document.getElementById('visual-app-body').style.display = 'flex';
+                document.getElementById('stripePaywallBox').style.display = 'none';
             }
         }
 
@@ -271,7 +265,7 @@
             const errorMsg = document.getElementById('trial-error-msg');
 
             if (!otp) {
-                errorMsg.style.color = '#d9534f';
+                errorMsg.style.color = '#dc3545';
                 errorMsg.innerText = "Inserisci un codice OTP valido.";
                 errorMsg.style.display = 'block';
                 return;
@@ -289,8 +283,6 @@
 
         function mostraLoginModal(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'flex'; }
         function chiudiLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
-        function mostraResetPasswordModal(e) { e.preventDefault(); alert("Contatta l'assistenza INFIX® per il reset rapido della password."); }
-        function scrollToPacks() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
 
         function eseguiLogin() {
             const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -318,8 +310,8 @@
                 let numCredits = parseInt(credits);
                 if (isNaN(numCredits) || numCredits <= 0) {
                     document.getElementById('visual-app-body').style.display = 'none';
-                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento qui sotto per continuare.");
-                    scrollToPacks();
+                    document.getElementById('stripePaywallBox').style.display = 'block';
+                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento per continuare.");
                     return;
                 }
                 numCredits--;
@@ -328,7 +320,7 @@
 
                 if (numCredits <= 0) {
                     document.getElementById('visual-app-body').style.display = 'none';
-                    scrollToPacks();
+                    document.getElementById('stripePaywallBox').style.display = 'block';
                 }
             }
 
