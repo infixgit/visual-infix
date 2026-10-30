@@ -92,7 +92,7 @@
 
                 <div id="step-otp-container" style="display: none; flex-direction: column; gap: 8px; align-items: center; margin-top: 6px; width: 100%;">
                     <p style="font-size: 12px; color: #1b5e20; margin: 0; line-height: 1.4;">
-                        Codice OTP spedito da <strong>infixserramenti@gmail.it</strong> a <strong id="sent-email-label" style="color: #000;"></strong>
+                        Codice OTP inviato a <strong id="sent-email-label" style="color: #000;"></strong>
                     </p>
                     <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 2px; font-weight: bold; width: 100%; max-width: 200px; padding: 8px; box-sizing: border-box;">
                     <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
@@ -444,14 +444,4 @@
                 'pack_3': 'https://buy.stripe.com/TUO_LINK_PACK_3',
                 'pro_unlimited': 'https://buy.stripe.com/TUO_LINK_PRO_UNLIMITED'
             };
-            window.location.href = stripeLinks[planKey] || "https://buy.stripe.com/TUO_LINK_DI_PAGAMENTO_INFIX";
-        }
-
-        function eseguiLogout() {
-            localStorage.removeItem('infix_visual_user_email');
-            localStorage.removeItem('infix_visual_credits');
-            location.reload();
-        }
-    </script>
-</body>
-</html>
+            window.location.href = stripeLinks[planKey] ||
