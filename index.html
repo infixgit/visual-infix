@@ -9,17 +9,6 @@
     <meta name="theme-color" content="#000000">
 
     <style>
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #ffffff; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 99999;
-            transition: opacity 0.6s ease, visibility 0.6s ease; text-align: center; padding: 15px; box-sizing: border-box;
-        }
-        .splash-content { max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .splash-image { max-width: 100%; width: 380px; height: auto; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-        .splash-spinner { width: 36px; height: 36px; border: 4px solid #f3f3f3; border-top: 4px solid #0056b3; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 20px auto; padding: 15px; background: #f4f4f9; display: flex; flex-direction: column; box-sizing: border-box; }
         .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         
@@ -48,15 +37,6 @@
     </style>
 </head>
 <body>
-
-    <div id="splash-screen">
-        <div class="splash-content">
-            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Visual INFIX" class="splash-image" onerror="this.src='/logo.png'">
-            <h2>Visual INFIX® AI</h2>
-            <p>Inizializzazione simulatore grafico professionale in corso...</p>
-            <div class="splash-spinner"></div>
-        </div>
-    </div>
 
     <div class="card">
         <div class="header">
@@ -196,16 +176,6 @@
     </div>
 
     <script>
-        window.addEventListener('load', function() {
-            const splash = document.getElementById('splash-screen');
-            if (splash) {
-                setTimeout(function() {
-                    splash.style.opacity = '0';
-                    splash.style.visibility = 'hidden';
-                }, 600);
-            }
-        });
-
         let currentOtpEmail = '';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -287,7 +257,6 @@
 
         function eseguiLoginPassword() {
             const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const pass = document.getElementById('login-password').value.trim();
             const msg = document.getElementById('login-msg');
 
             if (email === 'santino.simoncello@libero.it' || email === 'infix@outlook.it') {
@@ -302,7 +271,6 @@
             }
         }
 
-        // Generazione Simulazione Visiva con elaborazione grafica
         document.getElementById('visualForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -331,8 +299,6 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 setTimeout(() => {
-                    // Simula l'elaborazione applicando un filtro grafico sull'immagine originale
-                    // per restituire una versione visivamente trasformata (es. contrasto/effetto render)
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
@@ -340,9 +306,8 @@
                         canvas.height = img.height;
                         const ctx = canvas.getContext('2d');
                         
-                        // Disegna l'immagine originale con una leggera modifica cromatica da rendering
                         ctx.drawImage(img, 0, 0);
-                        ctx.fillStyle = 'rgba(0, 86, 179, 0.08)'; // Leggero filtro tinta tecnico INFIX
+                        ctx.fillStyle = 'rgba(0, 86, 179, 0.08)';
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                         document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
@@ -359,7 +324,7 @@
                         document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
                     };
                     img.src = e.target.result;
-                }, 1500);
+                }, 1000);
             };
 
             reader.readAsDataURL(file);
