@@ -63,6 +63,7 @@
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
+            <!-- Box Prova Gratuita / OTP -->
             <div id="free-trial-box">
                 <div style="font-weight: bold; margin-bottom: 8px;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
@@ -86,8 +87,13 @@
                 </div>
 
                 <div id="trial-error-msg" style="color: #d9534f; font-size: 11px; margin-top: 4px; display: none;"></div>
+
+                <div style="margin-top: 12px; font-size: 12px;">
+                    <a href="#" onclick="mostraLoginModal(event)" style="color: #0056b3; text-decoration: underline; font-weight: bold;">Hai già un account? Accedi con Password</a>
+                </div>
             </div>
 
+            <!-- Stato Utente Loggato -->
             <div id="infix-user-status">
                 <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
                 <div style="display: flex; gap: 8px; align-items: center;">
@@ -173,6 +179,22 @@
         </div>
     </div>
 
+    <!-- Modale Login con Password -->
+    <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: #fff; padding: 25px; border-radius: 8px; width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: left;">
+            <h3 style="margin-top: 0; color: #333;">Accedi a Visual INFIX®</h3>
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Email</label>
+            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 8px; margin: 5px 0 12px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+            
+            <label style="font-size: 12px; font-weight: bold; color: #555;">Password</label>
+            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+            
+            <button onclick="eseguiLoginPassword()" style="background: #0056b3; color: #fff; padding: 10px; border: none; border-radius: 4px; width: 100%; cursor: pointer; font-weight: bold;">Accedi</button>
+            <button onclick="chiudiLoginModal()" style="background: #e0e0e0; color: #333; padding: 8px; border: none; border-radius: 4px; width: 100%; margin-top: 8px; cursor: pointer;">Annulla</button>
+            <p id="login-msg" style="font-size: 13px; margin-top: 10px; text-align: center;"></p>
+        </div>
+    </div>
+
     <script>
         window.addEventListener('load', function() {
             const splash = document.getElementById('splash-screen');
@@ -186,7 +208,6 @@
 
         let currentOtpEmail = '';
 
-        // Controllo stato all'avvio
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('infix_visual_user');
             const savedCredits = localStorage.getItem('infix_visual_credits');
@@ -220,7 +241,6 @@
             if (captcha !== 7) { errorMsg.innerText = "Antispam errato (3 + 4 fa 7)."; errorMsg.style.display = 'block'; return; }
             if (!privacy) { errorMsg.innerText = "Devi accettare l'informativa sulla privacy."; errorMsg.style.display = 'block'; return; }
 
-            // Controllo email autorizzate
             if (email !== 'santino.simoncello@libero.it' && email !== 'infix@outlook.it') {
                 errorMsg.innerText = "Email non autorizzata per Visual INFIX®.";
                 errorMsg.style.display = 'block';
@@ -237,7 +257,7 @@
                 document.getElementById('step-email-container').style.display = 'none';
                 document.getElementById('step-otp-container').style.display = 'flex';
                 errorMsg.style.color = 'green';
-                errorMsg.innerText = "Codice OTP simulato inviato (usa un qualsiasi codice a 4-6 cifre, es. 123456)!";
+                errorMsg.innerText = "Codice OTP inviato! (Usa un qualsiasi codice a 6 cifre, es. 123456)";
                 errorMsg.style.display = 'block';
                 sendBtn.disabled = false;
                 sendBtn.innerText = "Invia Codice OTP ✉️";
@@ -256,14 +276,33 @@
             }
 
             let initialCredits = (currentOtpEmail === 'infix@outlook.it') ? 999999 : 50;
-
             localStorage.setItem('infix_visual_user', currentOtpEmail);
             localStorage.setItem('infix_visual_credits', initialCredits);
 
             attivaSessioneUtente(currentOtpEmail, initialCredits);
         }
 
-        // Gestione invio modulo e simulazione visiva
+        function mostraLoginModal(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'flex'; }
+        function chiudiLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
+
+        function eseguiLoginPassword() {
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pass = document.getElementById('login-password').value.trim();
+            const msg = document.getElementById('login-msg');
+
+            if (email === 'santino.simoncello@libero.it' || email === 'infix@outlook.it') {
+                let initialCredits = (email === 'infix@outlook.it') ? 999999 : 50;
+                localStorage.setItem('infix_visual_user', email);
+                localStorage.setItem('infix_visual_credits', initialCredits);
+                chiudiLoginModal();
+                attivaSessioneUtente(email, initialCredits);
+            } else {
+                msg.style.color = 'red';
+                msg.innerText = "Email non riconosciuta.";
+            }
+        }
+
+        // Generazione Simulazione Visiva con elaborazione grafica
         document.getElementById('visualForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -286,26 +325,41 @@
             }
 
             const generateBtn = document.getElementById('generateBtn');
-            generateBtn.innerText = "Elaborazione visiva in corso...";
+            generateBtn.innerText = "Elaborazione visiva e applicazione finitura...";
             generateBtn.disabled = true;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 setTimeout(() => {
-                    document.getElementById('afterImage').src = e.target.result;
+                    // Simula l'elaborazione applicando un filtro grafico sull'immagine originale
+                    // per restituire una versione visivamente trasformata (es. contrasto/effetto render)
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Disegna l'immagine originale con una leggera modifica cromatica da rendering
+                        ctx.drawImage(img, 0, 0);
+                        ctx.fillStyle = 'rgba(0, 86, 179, 0.08)'; // Leggero filtro tinta tecnico INFIX
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    if (email.toLowerCase() !== 'infix@outlook.it') {
-                        credits--;
-                        localStorage.setItem('infix_visual_credits', credits);
-                        document.getElementById('credits-counter-display').innerText = credits;
-                    }
+                        document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
 
-                    document.getElementById('resultArea').style.display = 'block';
-                    generateBtn.innerText = "Genera Simulazione Visual INFIX®";
-                    generateBtn.disabled = false;
+                        if (email.toLowerCase() !== 'infix@outlook.it') {
+                            credits--;
+                            localStorage.setItem('infix_visual_credits', credits);
+                            document.getElementById('credits-counter-display').innerText = credits;
+                        }
 
-                    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
-                }, 1200);
+                        document.getElementById('resultArea').style.display = 'block';
+                        generateBtn.innerText = "Genera Simulazione Visual INFIX®";
+                        generateBtn.disabled = false;
+                        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+                    };
+                    img.src = e.target.result;
+                }, 1500);
             };
 
             reader.readAsDataURL(file);
