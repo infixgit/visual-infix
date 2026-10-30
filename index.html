@@ -9,36 +9,34 @@
     <meta name="theme-color" content="#111111">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 850px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
-        .card { background: white; padding: 40px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
+        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
         
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 110px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .header h2 { margin: 5px 0; font-size: 1.9rem; color: #111; }
-        .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
+        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
+        .header p { color: #666; font-size: 0.95rem; margin: 5px 0 0 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 25px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
+        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
+        #free-trial-box input[type="email"] { padding: 12px 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; background: #fff; }
+        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 8px 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; text-align: center; background: #fff; }
         
-        /* Input email a larghezza piena e senza alcun taglio */
-        #free-trial-box input[type="email"] { padding: 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 15px; margin-bottom: 15px; box-sizing: border-box; background: #fff; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 14px; box-sizing: border-box; text-align: center; background: #fff; }
-        
-        .btn-green { background: #2e7d32; color: white; border: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 15px; width: 100%; transition: background 0.2s; box-sizing: border-box; }
+        .btn-green { background: #2e7d32; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 14px; width: 100%; transition: background 0.2s; }
         .btn-green:hover { background: #1b5e20; }
 
-        #infix-user-status { background: #eef2f5; padding: 14px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
+        #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
 
-        .pro-banner { background: #212529; color: white; padding: 14px 18px; border-radius: 8px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
-        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
+        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
         .pro-banner button:hover { background: #e0a800; }
 
-        .pack-buttons-container { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .pack-btn { background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
+        .pack-btn { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
         .pack-btn:hover { background: #218838; }
         .pack-btn.pro-unlimited { background: #007bff; }
         .pack-btn.pro-unlimited:hover { background: #0056b3; }
 
-        .auth-links { margin-top: 20px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
+        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
         .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
 
         .form-section { margin-top: 25px; display: flex; flex-direction: column; gap: 20px; border-top: 2px solid #e9ecef; padding-top: 25px; box-sizing: border-box; width: 100%; }
@@ -61,14 +59,14 @@
     <div class="card">
         <div class="header">
             <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
-            <h2>Visual INFIX® (v2.6)</h2>
+            <h2>Visual INFIX® (v3.1)</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
             <!-- Box Accesso / Prova Gratuita -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 12px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
                     <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
                     
                     <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
@@ -84,16 +82,16 @@
                     <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 12px; align-items: center; margin-top: 10px; width: 100%;">
+                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px; width: 100%;">
                     <p style="font-size: 13px; color: #1b5e20; margin: 0; line-height: 1.5;">
                         Codice OTP spedito da <strong>infixserramenti@gmail.it</strong><br>
                         all'indirizzo del destinatario: <strong id="sent-email-label" style="color: #000;"></strong>
                     </p>
-                    <input type="text" id="otp-input" placeholder="Inserisci codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 100%; max-width: 280px; padding: 12px; box-sizing: border-box;">
+                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 100%; max-width: 240px; padding: 10px; box-sizing: border-box;">
                     <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 10px; display: none; font-weight: bold;"></div>
+                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
             </div>
 
             <!-- Banner PRO -->
@@ -128,15 +126,15 @@
             </div>
         </div>
 
-        <!-- Form Simulatore Visivo INFIX® Completo di Categorie -->
-        <form id="visualForm" class="form-section" style="display: none;">
+        <!-- Form Simulatore Visivo INFIX® Completo di Categoria, Finiture e Caricamento Foto -->
+        <form id="visualForm" class="form-section">
             <div class="form-group">
-                <label for="photoInput">1. Scatta o carica la foto dello stato attuale</label>
+                <label for="photoInput">📷 1. Scatta o carica la foto dello stato attuale</label>
                 <input type="file" id="photoInput" accept="image/*" required>
             </div>
 
             <div class="form-group">
-                <label for="productSelect">2. Seleziona la Categoria INFIX®</label>
+                <label for="productSelect">🗂️ 2. Seleziona la Categoria INFIX®</label>
                 <select id="productSelect">
                     <optgroup label="Serramenti & Vetrate">
                         <option value="serramento">Serramento / Finestra / Scorrevole</option>
@@ -166,7 +164,7 @@
             </div>
 
             <div class="form-group">
-                <label for="finishSelect">3. Scegli Finitura / Colore INFIX®</label>
+                <label for="finishSelect">🎨 3. Scegli Finitura / Colore INFIX®</label>
                 <select id="finishSelect">
                     <option value="ral9010">Bianco Puro RAL 9010</option>
                     <option value="ral7016">Grigio Antracite RAL 7016</option>
