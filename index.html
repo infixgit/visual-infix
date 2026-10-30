@@ -17,7 +17,6 @@
         .header h2 { margin: 3px 0; font-size: 1.5rem; color: #111; }
         .header p { color: #666; font-size: 0.85rem; margin: 3px 0 0 0; }
 
-        /* Nota informativa iniziale visibile prima del login */
         .welcome-note { background: #e3f2fd; border: 1px solid #bbdefb; padding: 14px 16px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #0d47a1; text-align: left; box-sizing: border-box; width: 100%; line-height: 1.5; }
 
         #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 14px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
@@ -50,7 +49,6 @@
         .stripe-packs-box { display: none; margin-top: 20px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
         .stripe-packs-box h4 { margin: 0 0 6px 0; color: #f57f17; font-size: 14px; }
 
-        /* Area Risultato Prima / Dopo */
         .result-box { margin-top: 20px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
         .comparison-grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
         .comparison-item { flex: 1; min-width: 280px; background: #f8f9fa; padding: 12px; border-radius: 6px; border: 1px solid #e9ecef; box-sizing: border-box; }
@@ -66,7 +64,6 @@
             <h2>Visual INFIX® (v4.4)</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Nota informativa iniziale sul sistema e sulle prove gratuite -->
             <div class="welcome-note">
                 👋 <strong>Benvenuto in Visual INFIX®!</strong><br>
                 Il sistema offre <strong>2 simulazioni gratuite</strong> per testare il rendering dei serramenti e delle finiture INFIX®.<br>
@@ -74,7 +71,6 @@
                 2. Carica la foto, scegli categoria e finitura per generare il confronto immediato <strong>Prima / Dopo</strong>.
             </div>
 
-            <!-- Box Accesso / OTP -->
             <div id="free-trial-box">
                 <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
@@ -105,13 +101,11 @@
                 <div id="trial-error-msg" style="color: #d9534f; font-size: 12px; margin-top: 6px; display: none; font-weight: bold;"></div>
             </div>
 
-            <!-- Banner PRO -->
             <div class="pro-banner">
                 <span>🔒 Visual AI & Simulazione Avanzata (Funzione PRO)</span>
                 <button onclick="scrollToPacks()">Scopri i Piani PRO</button>
             </div>
 
-            <!-- Pulsanti Pack a Pagamento Stripe -->
             <div class="pack-buttons-container" id="packs-container">
                 <button class="pack-btn" onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
                 <button class="pack-btn" onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
@@ -119,13 +113,11 @@
                 <button class="pack-btn pro-unlimited" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
             </div>
 
-            <!-- Link di Accesso -->
             <div class="auth-links">
                 <a href="#" onclick="mostraLoginModal(event)">Hai già un account? Accedi qui</a>
                 <a href="#" onclick="mostraResetPasswordModal(event)" style="color: #d9534f;">Password dimenticata?</a>
             </div>
 
-            <!-- Stato Utente Loggato & Crediti -->
             <div id="infix-user-status">
                 <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
                 <div style="display: flex; gap: 10px; align-items: center;">
@@ -137,7 +129,6 @@
             </div>
         </div>
 
-        <!-- Form Simulatore Visivo (PROTETTO: visibile solo post-login) -->
         <form id="visualForm" class="form-section">
             <div class="form-group">
                 <label for="photoInput">📷 1. Carica la foto dello stato attuale</label>
@@ -191,7 +182,6 @@
             <button type="submit" class="btn-primary" id="generateBtn">Genera Simulazione Visual INFIX® 🎨</button>
         </form>
 
-        <!-- Box Sblocco Pacchetti Stripe -->
         <div id="stripePaywall" class="stripe-packs-box">
             <h4>⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
             <p style="font-size: 12px; color: #666; margin: 4px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto:</p>
@@ -203,7 +193,6 @@
             </div>
         </div>
 
-        <!-- Risultato Simulazione Prima / Dopo -->
         <div id="resultArea" class="result-box">
             <h3 style="margin-top:0; color:#111; font-size: 1.3rem;">Confronto Visual INFIX®</h3>
             <p id="resultSubtitle" style="font-size: 12px; color: #666; font-weight: bold;"></p>
@@ -221,7 +210,6 @@
         </div>
     </div>
 
-    <!-- Modale Login con Password -->
     <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
         <div style="background: #fff; padding: 25px; border-radius: 10px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: left; box-sizing: border-box;">
             <h3 style="margin-top: 0; color: #111; font-size: 1.2rem;">Accedi a Visual INFIX®</h3>
@@ -238,6 +226,8 @@
     </div>
 
     <script>
+        // URL del backend sicuro su Render
+        const RENDER_BACKEND_URL = 'https://bussola-infix-staging.onrender.com';
         let currentOtpEmail = '';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -294,27 +284,39 @@
             if (captcha !== 7) { errorMsg.innerText = "Antispam errato (3 + 4 fa 7)."; errorMsg.style.display = 'block'; return; }
             if (!privacy) { errorMsg.innerText = "Devi accettare l'informativa sulla privacy."; errorMsg.style.display = 'block'; return; }
 
-            if (email !== 'santino.simoncello@libero.it' && email !== 'infix@outlook.it') {
-                errorMsg.innerText = "Email non autorizzata per Visual INFIX®.";
-                errorMsg.style.display = 'block';
-                return;
-            }
-
             errorMsg.style.display = 'none';
             sendBtn.disabled = true;
-            sendBtn.innerText = "Invio in corso... ⏳";
+            sendBtn.innerText = "Invio OTP tramite Render... ⏳";
 
-            setTimeout(() => {
-                currentOtpEmail = email;
-                document.getElementById('sent-email-label').innerText = email;
-                document.getElementById('step-email-container').style.display = 'none';
-                document.getElementById('step-otp-container').style.display = 'flex';
+            try {
+                const response = await fetch(`${RENDER_BACKEND_URL}/api/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentOtpEmail = email;
+                    document.getElementById('sent-email-label').innerText = email;
+                    document.getElementById('step-email-container').style.display = 'none';
+                    document.getElementById('step-otp-container').style.display = 'flex';
+                } else {
+                    errorMsg.innerText = data.error || "Errore durante l'invio dell'OTP.";
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.innerText = "Impossibile contattare il server sicuro. Riprova tra poco.";
+                errorMsg.style.display = 'block';
+            } finally {
                 sendBtn.disabled = false;
                 sendBtn.innerText = "Invia Codice OTP ✉️";
-            }, 500);
+            }
         }
 
-        function verificaCodiceOtpEAccedi() {
+        async function verificaCodiceOtpEAccedi() {
             const otp = document.getElementById('otp-input').value.trim();
             const errorMsg = document.getElementById('trial-error-msg');
 
@@ -325,14 +327,33 @@
                 return;
             }
 
-            let initialCredits = (currentOtpEmail.toLowerCase() === 'infix@outlook.it') ? 'PRO Illimitato' : ((currentOtpEmail.toLowerCase() === 'santino.simoncello@libero.it') ? '50' : '2');
-            
-            let existingCredits = localStorage.getItem('infix_visual_credits');
-            if (localStorage.getItem('infix_visual_user_email') === currentOtpEmail && existingCredits !== null) {
-                initialCredits = existingCredits;
-            }
+            try {
+                const response = await fetch(`${RENDER_BACKEND_URL}/api/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentOtpEmail, otp: otp })
+                });
 
-            attivaSessioneUtente(currentOtpEmail, initialCredits);
+                const data = await response.json();
+
+                if (response.ok) {
+                    let initialCredits = (currentOtpEmail.toLowerCase() === 'infix@outlook.it') ? 'PRO Illimitato' : ((currentOtpEmail.toLowerCase() === 'santino.simoncello@libero.it') ? '50' : '2');
+                    let existingCredits = localStorage.getItem('infix_visual_credits');
+                    if (localStorage.getItem('infix_visual_user_email') === currentOtpEmail && existingCredits !== null) {
+                        initialCredits = existingCredits;
+                    }
+                    attivaSessioneUtente(currentOtpEmail, initialCredits);
+                } else {
+                    errorMsg.style.color = '#dc3545';
+                    errorMsg.innerText = data.error || "Codice OTP errato o scaduto.";
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.style.color = '#dc3545';
+                errorMsg.innerText = "Errore di connessione al server di verifica.";
+                errorMsg.style.display = 'block';
+            }
         }
 
         function mostraLoginModal(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'flex'; }
@@ -384,8 +405,10 @@
 
             const fileInput = document.getElementById('photoInput');
             const file = fileInput.files[0];
-            const product = document.getElementById('productSelect').options[document.getElementById('productSelectselectedIndex'] || document.getElementById('productSelect').selectedIndex].text;
-            const finish = document.getElementById('finishSelect').options[document.getElementById('finishSelect').selectedIndex].text;
+            const productSelect = document.getElementById('productSelect');
+            const product = productSelect.options[productSelect.selectedIndex].text;
+            const finishSelect = document.getElementById('finishSelect');
+            const finish = finishSelect.options[finishSelect.selectedIndex].text;
 
             if (!file) {
                 alert("Per favore, seleziona o scatta prima una foto!");
