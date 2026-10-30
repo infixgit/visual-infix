@@ -9,49 +9,46 @@
     <meta name="theme-color" content="#111111">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
-        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 750px; margin: 20px auto; padding: 15px; background: #f4f4f9; color: #333; box-sizing: border-box; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
         
-        .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
-        .header p { color: #666; font-size: 0.95rem; margin: 5px 0 0 0; }
+        .header { text-align: center; margin-bottom: 18px; border-bottom: 2px solid #e9ecef; padding-bottom: 15px; }
+        .logo { max-width: 80px; height: auto; margin-bottom: 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .header h2 { margin: 3px 0; font-size: 1.5rem; color: #111; }
+        .header p { color: #666; font-size: 0.85rem; margin: 3px 0 0 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
-        #free-trial-box input[type="email"] { padding: 12px 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; background: #fff; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 8px 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; text-align: center; background: #fff; }
+        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 14px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
+        #free-trial-box input[type="email"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 13px; margin-bottom: 8px; box-sizing: border-box; background: #fff; }
+        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 6px 8px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 12px; box-sizing: border-box; text-align: center; background: #fff; }
         
-        .btn-green { background: #2e7d32; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 14px; width: 100%; transition: background 0.2s; }
+        .btn-green { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 13px; width: 100%; transition: background 0.2s; }
         .btn-green:hover { background: #1b5e20; }
 
-        #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
+        #infix-user-status { background: #eef2f5; padding: 10px 15px; border-radius: 6px; margin-top: 10px; display: none; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
 
-        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
-        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .pro-banner button:hover { background: #e0a800; }
+        .pro-banner { background: #212529; color: white; padding: 10px 15px; border-radius: 6px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; box-sizing: border-box; width: 100%; }
+        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 5px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .pack-btn { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .pack-btn:hover { background: #218838; }
+        .pack-buttons-container { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 12px; width: 100%; box-sizing: border-box; }
+        .pack-btn { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; }
         .pack-btn.pro-unlimited { background: #007bff; }
-        .pack-btn.pro-unlimited:hover { background: #0056b3; }
 
-        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
+        .auth-links { margin-top: 12px; display: flex; justify-content: center; gap: 15px; font-size: 12px; }
         .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
 
-        .form-section { margin-top: 25px; display: flex; flex-direction: column; gap: 20px; border-top: 2px solid #e9ecef; padding-top: 25px; box-sizing: border-box; width: 100%; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
-        .form-group label { font-size: 14px; font-weight: 600; color: #2d3748; }
-        .form-group select, .form-group input[type="file"] { padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; }
+        .form-section { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; border-top: 2px solid #e9ecef; padding-top: 20px; box-sizing: border-box; width: 100%; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+        .form-group label { font-size: 13px; font-weight: 600; color: #2d3748; }
+        .form-group select, .form-group input[type="file"] { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; }
 
-        button.btn-primary { background: #111; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; width: 100%; }
+        button.btn-primary { background: #111; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; }
         button.btn-primary:hover { background: #333; }
 
-        .stripe-packs-box { display: none; margin-top: 25px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 20px; border-radius: 10px; text-align: center; box-sizing: border-box; width: 100%; }
-        .stripe-packs-box h4 { margin: 0 0 8px 0; color: #f57f17; font-size: 15px; }
+        .stripe-packs-box { display: none; margin-top: 20px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
+        .stripe-packs-box h4 { margin: 0 0 6px 0; color: #f57f17; font-size: 14px; }
 
-        .result-box { margin-top: 25px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 10px; text-align: center; box-sizing: border-box; width: 100%; }
-        .result-box img { max-width: 100%; border-radius: 8px; margin-top: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); max-height: 500px; object-fit: contain; }
+        .result-box { margin-top: 20px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 15px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
+        .result-box img { max-width: 100%; border-radius: 6px; margin-top: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 400px; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -59,39 +56,38 @@
     <div class="card">
         <div class="header">
             <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
-            <h2>Visual INFIX® (v3.1)</h2>
+            <h2>Visual INFIX® (v4.0)</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
             <!-- Box Accesso / Prova Gratuita -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
+                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 8px; align-items: center; width: 100%;">
                     <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
                     
-                    <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
+                    <div style="font-size: 12px; color: #333; display: flex; align-items: center; gap: 6px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
                         <input type="number" id="captcha-input" placeholder="?">
                     </div>
                     
-                    <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; width: 100%;">
-                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
-                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
+                    <div style="font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px; text-align: left; width: 100%;">
+                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 14px; height: 14px;">
+                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e trattamento dati.</label>
                     </div>
                     
                     <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px; width: 100%;">
-                    <p style="font-size: 13px; color: #1b5e20; margin: 0; line-height: 1.5;">
-                        Codice OTP spedito da <strong>infixserramenti@gmail.it</strong><br>
-                        all'indirizzo del destinatario: <strong id="sent-email-label" style="color: #000;"></strong>
+                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 8px; align-items: center; margin-top: 6px; width: 100%;">
+                    <p style="font-size: 12px; color: #1b5e20; margin: 0; line-height: 1.4;">
+                        Codice OTP spedito da <strong>infixserramenti@gmail.it</strong> a <strong id="sent-email-label" style="color: #000;"></strong>
                     </p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 100%; max-width: 240px; padding: 10px; box-sizing: border-box;">
+                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 2px; font-weight: bold; width: 100%; max-width: 200px; padding: 8px; box-sizing: border-box;">
                     <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
+                <div id="trial-error-msg" style="color: #d9534f; font-size: 12px; margin-top: 6px; display: none; font-weight: bold;"></div>
             </div>
 
             <!-- Banner PRO -->
@@ -108,25 +104,25 @@
                 <button class="pack-btn pro-unlimited" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
             </div>
 
-            <!-- Link di Accesso / Password Dimenticata -->
+            <!-- Link di Accesso -->
             <div class="auth-links">
                 <a href="#" onclick="mostraLoginModal(event)">Hai già un account? Accedi qui</a>
                 <a href="#" onclick="mostraResetPasswordModal(event)" style="color: #d9534f;">Password dimenticata?</a>
             </div>
 
-            <!-- Stato Utente Loggato & Crediti Residui -->
+            <!-- Stato Utente Loggato & Crediti -->
             <div id="infix-user-status">
                 <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
-                        Crediti Residui: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="background: #fff; padding: 4px 10px; border-radius: 5px; border: 1px solid #cbd5e0; font-size: 12px;">
+                        Crediti: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
                     </span>
-                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
+                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">Esci 🚪</button>
                 </div>
             </div>
         </div>
 
-        <!-- Form Simulatore Visivo INFIX® Completo di Categoria, Finiture e Caricamento Foto -->
+        <!-- Form Simulatore Visivo INFIX® Completo di Categorie e Caricamento Foto -->
         <form id="visualForm" class="form-section">
             <div class="form-group">
                 <label for="photoInput">📷 1. Scatta o carica la foto dello stato attuale</label>
@@ -183,7 +179,7 @@
         <!-- Box Sblocco Pacchetti Stripe -->
         <div id="stripePaywall" class="stripe-packs-box">
             <h4>⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
-            <p style="font-size: 13px; color: #666; margin: 6px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto sopra o qui sotto:</p>
+            <p style="font-size: 12px; color: #666; margin: 4px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto:</p>
             <div class="pack-buttons-container">
                 <button class="pack-btn" onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
                 <button class="pack-btn" onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
@@ -194,8 +190,8 @@
 
         <!-- Risultato Simulazione -->
         <div id="resultArea" class="result-box">
-            <h3 style="margin-top:0; color:#111; font-size: 1.4rem;">Anteprima Elaborata Visual INFIX®</h3>
-            <p style="font-size: 13px; color: #666;">Simulazione grafica e rendering della finitura selezionata</p>
+            <h3 style="margin-top:0; color:#111; font-size: 1.3rem;">Anteprima Elaborata Visual INFIX®</h3>
+            <p style="font-size: 12px; color: #666;">Simulazione grafica e rendering della finitura selezionata</p>
             <div class="image-comparison">
                 <img id="afterImage" alt="Risultato Elaborato">
             </div>
@@ -204,17 +200,17 @@
 
     <!-- Modale Login con Password -->
     <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: #fff; padding: 30px; border-radius: 12px; width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: left; box-sizing: border-box;">
-            <h3 style="margin-top: 0; color: #111; font-size: 1.3rem;">Accedi a Visual INFIX®</h3>
-            <label style="font-size: 13px; font-weight: bold; color: #444;">Email</label>
-            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 10px; margin: 6px 0 15px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
+        <div style="background: #fff; padding: 25px; border-radius: 10px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: left; box-sizing: border-box;">
+            <h3 style="margin-top: 0; color: #111; font-size: 1.2rem;">Accedi a Visual INFIX®</h3>
+            <label style="font-size: 12px; font-weight: bold; color: #444;">Email</label>
+            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 8px; margin: 5px 0 12px 0; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box;" />
             
-            <label style="font-size: 13px; font-weight: bold; color: #444;">Password</label>
-            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 10px; margin: 6px 0 20px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
+            <label style="font-size: 12px; font-weight: bold; color: #444;">Password</label>
+            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box;" />
             
-            <button onclick="eseguiLoginPassword()" style="background: #111; color: #fff; padding: 12px; border: none; border-radius: 6px; width: 100%; cursor: pointer; font-weight: bold; font-size: 15px;">Accedi</button>
-            <button onclick="chiudiLoginModal()" style="background: #e2e8f0; color: #333; padding: 10px; border: none; border-radius: 6px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: 600;">Annulla</button>
-            <p id="login-msg" style="font-size: 13px; margin-top: 12px; text-align: center; font-weight: bold;"></p>
+            <button onclick="eseguiLoginPassword()" style="background: #111; color: #fff; padding: 10px; border: none; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; font-size: 14px;">Accedi</button>
+            <button onclick="chiudiLoginModal()" style="background: #e2e8f0; color: #333; padding: 8px; border: none; border-radius: 5px; width: 100%; margin-top: 8px; cursor: pointer; font-weight: 600;">Annulla</button>
+            <p id="login-msg" style="font-size: 12px; margin-top: 10px; text-align: center; font-weight: bold;"></p>
         </div>
     </div>
 
@@ -292,7 +288,7 @@
                 document.getElementById('step-otp-container').style.display = 'flex';
                 sendBtn.disabled = false;
                 sendBtn.innerText = "Invia Codice OTP ✉️";
-            }, 600);
+            }, 500);
         }
 
         function verificaCodiceOtpEAccedi() {
@@ -386,7 +382,7 @@
                     generateBtn.disabled = false;
 
                     document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
-                }, 1500);
+                }, 1200);
             };
 
             reader.readAsDataURL(file);
