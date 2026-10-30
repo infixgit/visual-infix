@@ -27,9 +27,10 @@
         .header h2 { margin: 5px 0; font-size: 1.5rem; color: #111; }
         .header p { color: #666; font-size: 0.9rem; margin: 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 14px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #2e7d32; text-align: center; }
-        #free-trial-box input[type="email"], #free-trial-box input[type="text"] { padding: 8px; border: 1px solid #a5d6a7; border-radius: 4px; width: 80%; max-width: 260px; font-size: 13px; margin-bottom: 6px; box-sizing: border-box; }
-        #free-trial-box button { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 6px; }
+        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 16px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #2e7d32; text-align: center; }
+        #free-trial-box input[type="email"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 4px; width: 100%; max-width: 320px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
+        #free-trial-box input[type="text"], #free-trial-box input[type="number"] { padding: 8px; border: 1px solid #a5d6a7; border-radius: 4px; font-size: 13px; box-sizing: border-box; }
+        #free-trial-box button { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 14px; }
 
         #infix-user-status { background: #eef2f5; padding: 10px 14px; border-radius: 6px; margin-top: 10px; display: none; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; color: #333; }
 
@@ -67,33 +68,36 @@
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico "Prima / Dopo" & Catalogo Completo Finiture</p>
             
-            <!-- Box Prova Gratuita / OTP -->
+            <!-- Box Accesso / OTP -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 6px;">🎁 PROVA GRATUITA 2 CREDITI / ACCESSO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
-                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email...">
-                    <div style="font-size: 11px; color: #333; display: flex; align-items: center; gap: 5px;">
+                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
+                    
+                    <div style="font-size: 12px; color: #333; display: flex; align-items: center; gap: 6px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
-                        <input type="number" id="captcha-input" placeholder="?" style="width: 40px; padding: 3px; text-align: center; border: 1px solid #ccc; border-radius: 4px; font-size: 11px;">
+                        <input type="number" id="captcha-input" placeholder="?" style="width: 45px; padding: 4px; text-align: center;">
                     </div>
-                    <div style="font-size: 11px; color: #444; display: flex; align-items: center; gap: 5px; text-align: left; max-width: 280px;">
-                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer;">
-                        <label for="privacy-checkbox" style="cursor: pointer;">Accetto l'informativa sulla privacy e il trattamento dei dati.</label>
+                    
+                    <div style="font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px; text-align: left; max-width: 320px;">
+                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
+                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa sulla privacy e il trattamento dati.</label>
                     </div>
+                    
                     <button id="send-otp-btn" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 6px; align-items: center; margin-top: 4px;">
-                    <p style="font-size: 12px; color: #2e7d32; margin: 0;">Codice OTP inviato via email da infixserramenti@gmail.it a <strong id="sent-email-label"></strong>.</p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 2px; font-weight: bold;">
+                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 8px; align-items: center; margin-top: 6px;">
+                    <p style="font-size: 13px; color: #2e7d32; margin: 0;">Codice OTP inviato da infixserramenti@gmail.it a <strong id="sent-email-label"></strong>.</p>
+                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 3px; font-weight: bold; width: 200px; padding: 8px;">
                     <button onclick="verificaCodiceOtpEAccedi()" style="background: #1b5e20;">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 11px; margin-top: 4px; display: none;"></div>
+                <div id="trial-error-msg" style="color: #dc3545; font-size: 12px; margin-top: 6px; display: none; font-weight: bold;"></div>
 
-                <div style="margin-top: 10px;">
-                    <a href="#" onclick="mostraLoginModal(event)" style="color: #0066cc; text-decoration: underline; font-weight: bold; font-size: 12px;">Hai già un account? Accedi qui</a>
+                <div style="margin-top: 12px;">
+                    <a href="#" onclick="mostraLoginModal(event)" style="color: #0056b3; text-decoration: underline; font-weight: bold; font-size: 13px;">Hai già un account? Accedi con Password</a>
                 </div>
             </div>
 
@@ -160,7 +164,7 @@
             <button class="btn-primary" id="generateBtn" onclick="eseguiElaborazioneVisuale()">Genera Simulazione Visual INFIX® 🎨</button>
         </div>
 
-        <!-- Box Sblocco Pacchetti Stripe (Si attiva quando i crediti sono 0) -->
+        <!-- Box Sblocco Pacchetti Stripe -->
         <div id="stripePaywallBox" class="stripe-packs-box">
             <h4 id="paywall-title">⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
             <p style="font-size: 12px; color: #666; margin: 5px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto:</p>
@@ -209,7 +213,6 @@
 
         let currentOtpEmail = '';
 
-        // Memoria persistente: ricarica l'utente e i crediti residui salvati
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('infix_visual_user_email');
             
@@ -242,7 +245,6 @@
             localStorage.setItem('infix_visual_credits', displayCredits);
             document.getElementById('credits-counter-display').innerText = displayCredits;
 
-            // Se i crediti sono 0 per gli utenti standard, nascondi il form e mostra Stripe
             if (emailLower !== 'infix@outlook.it' && parseInt(displayCredits) <= 0) {
                 document.getElementById('visual-app-body').style.display = 'none';
                 document.getElementById('stripePaywallBox').style.display = 'block';
@@ -294,7 +296,6 @@
 
             let initialCredits = (currentOtpEmail.toLowerCase() === 'infix@outlook.it') ? 'PRO Illimitato' : ((currentOtpEmail.toLowerCase() === 'santino.simoncello@libero.it') ? '50' : '2');
             
-            // Verifica se l'utente ha già salvato dei crediti residui in precedenza
             let existingCredits = localStorage.getItem('infix_visual_credits');
             if (localStorage.getItem('infix_visual_user_email') === currentOtpEmail && existingCredits !== null) {
                 initialCredits = existingCredits;
