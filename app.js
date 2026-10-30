@@ -2,7 +2,7 @@
 const FREE_LIMIT = 2;
 let usedSimulations = parseInt(localStorage.getItem('visual_infix_credits') || '0');
 
-// URL Link Checkout Stripe (Da aggiornare con il link effettivo della dashboard Stripe)
+// URL Link Checkout Stripe (Da aggiornare successivamente)
 const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/TUO_LINK_DI_PAGAMENTO_INFIX";
 
 // Aggiorna l'Interfaccia Utente in base ai crediti rimanenti
@@ -17,7 +17,7 @@ function updateCreditsUI() {
   }
 }
 
-// Gestione invio modulo
+// Gestione invio modulo ed elaborazione immagine
 document.getElementById('visualForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -26,22 +26,42 @@ document.getElementById('visualForm').addEventListener('submit', async function(
     return;
   }
 
+  const fileInput = document.getElementById('photoInput');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Per favore, seleziona o scatta prima una foto!");
+    return;
+  }
+
   const generateBtn = document.getElementById('generateBtn');
   generateBtn.innerText = "Elaborazione visiva in corso...";
   generateBtn.disabled = true;
 
-  // Chiamata all'engine visivo (Simulazione)
-  setTimeout(() => {
-    // Incrementa contatore utilizzi
-    usedSimulations++;
-    localStorage.setItem('visual_infix_credits', usedSimulations.toString());
-    updateCreditsUI();
+  // Lettura e anteprima dell'immagine caricata
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    setTimeout(() => {
+      // Imposta l'immagine elaborata nell'area di anteprima
+      const afterImage = document.getElementById('afterImage');
+      afterImage.src = e.target.result;
 
-    // Mostra il risultato nella pagina
-    document.getElementById('resultArea').style.display = 'block';
-    generateBtn.innerText = "Genera Simulazione Visual INFIX®";
-    generateBtn.disabled = false;
-  }, 2500);
+      // Incrementa contatore utilizzi
+      usedSimulations++;
+      localStorage.setItem('visual_infix_credits', usedSimulations.toString());
+      updateCreditsUI();
+
+      // Mostra il risultato nella pagina
+      document.getElementById('resultArea').style.display = 'block';
+      generateBtn.innerText = "Genera Simulazione Visual INFIX®";
+      generateBtn.disabled = false;
+
+      // Scorrimento automatico verso il risultato
+      document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
+  };
+
+  reader.readAsDataURL(file);
 });
 
 // Reindirizzamento al pagamento Stripe
