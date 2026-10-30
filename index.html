@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual INFIX® - Simulatore Visivo Professionale</title>
     
-    <link rel="icon" href="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg">
+    <link rel="icon" href="bussola-infix-marchio-figurativo-momento di intervenire.jpg">
     <meta name="theme-color" content="#111111">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 750px; margin: 20px auto; padding: 15px; background: #f4f4f9; color: #333; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 20px auto; padding: 15px; background: #f4f4f9; color: #333; box-sizing: border-box; }
         .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
         
         .header { text-align: center; margin-bottom: 18px; border-bottom: 2px solid #e9ecef; padding-bottom: 15px; }
-        .logo { max-width: 80px; height: auto; margin-bottom: 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .logo { max-width: 90px; height: auto; margin-bottom: 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
         .header h2 { margin: 3px 0; font-size: 1.5rem; color: #111; }
         .header p { color: #666; font-size: 0.85rem; margin: 3px 0 0 0; }
+
+        /* Nota informativa iniziale visibile prima del login */
+        .welcome-note { background: #e3f2fd; border: 1px solid #bbdefb; padding: 14px 16px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #0d47a1; text-align: left; box-sizing: border-box; width: 100%; line-height: 1.5; }
 
         #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 14px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
         #free-trial-box input[type="email"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 13px; margin-bottom: 8px; box-sizing: border-box; background: #fff; }
@@ -36,7 +39,7 @@
         .auth-links { margin-top: 12px; display: flex; justify-content: center; gap: 15px; font-size: 12px; }
         .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
 
-        .form-section { margin-top: 20px; display: flex; flex-direction: column; gap: 15px; border-top: 2px solid #e9ecef; padding-top: 20px; box-sizing: border-box; width: 100%; }
+        .form-section { display: none; margin-top: 15px; flex-direction: column; gap: 15px; border-top: 2px solid #e9ecef; padding-top: 20px; box-sizing: border-box; width: 100%; }
         .form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .form-group label { font-size: 13px; font-weight: 600; color: #2d3748; }
         .form-group select, .form-group input[type="file"] { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; }
@@ -47,19 +50,31 @@
         .stripe-packs-box { display: none; margin-top: 20px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
         .stripe-packs-box h4 { margin: 0 0 6px 0; color: #f57f17; font-size: 14px; }
 
-        .result-box { margin-top: 20px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 15px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
-        .result-box img { max-width: 100%; border-radius: 6px; margin-top: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-height: 400px; object-fit: contain; }
+        /* Area Risultato Prima / Dopo */
+        .result-box { margin-top: 20px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 8px; text-align: center; box-sizing: border-box; width: 100%; }
+        .comparison-grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .comparison-item { flex: 1; min-width: 280px; background: #f8f9fa; padding: 12px; border-radius: 6px; border: 1px solid #e9ecef; box-sizing: border-box; }
+        .comparison-item h4 { margin: 0 0 8px 0; font-size: 14px; color: #111; }
+        .comparison-item img { width: 100%; border-radius: 5px; max-height: 350px; object-fit: contain; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <div class="card">
         <div class="header">
-            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
-            <h2>Visual INFIX® (v4.0)</h2>
+            <img src="bussola-infix-marchio-figurativo-momento di intervenire.jpg" alt="Logo INFIX" class="logo">
+            <h2>Visual INFIX® (v4.4)</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Accesso / Prova Gratuita -->
+            <!-- Nota informativa iniziale sul sistema e sulle prove gratuite -->
+            <div class="welcome-note">
+                👋 <strong>Benvenuto in Visual INFIX®!</strong><br>
+                Il sistema offre <strong>2 simulazioni gratuite</strong> per testare il rendering dei serramenti e delle finiture INFIX®.<br>
+                1. Inserisci la tua email autorizzata qui sotto e verifica il codice OTP ricevuto per accedere.<br>
+                2. Carica la foto, scegli categoria e finitura per generare il confronto immediato <strong>Prima / Dopo</strong>.
+            </div>
+
+            <!-- Box Accesso / OTP -->
             <div id="free-trial-box">
                 <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
@@ -122,10 +137,10 @@
             </div>
         </div>
 
-        <!-- Form Simulatore Visivo INFIX® Completo di Categorie e Caricamento Foto -->
+        <!-- Form Simulatore Visivo (PROTETTO: visibile solo post-login) -->
         <form id="visualForm" class="form-section">
             <div class="form-group">
-                <label for="photoInput">📷 1. Scatta o carica la foto dello stato attuale</label>
+                <label for="photoInput">📷 1. Carica la foto dello stato attuale</label>
                 <input type="file" id="photoInput" accept="image/*" required>
             </div>
 
@@ -188,12 +203,20 @@
             </div>
         </div>
 
-        <!-- Risultato Simulazione -->
+        <!-- Risultato Simulazione Prima / Dopo -->
         <div id="resultArea" class="result-box">
-            <h3 style="margin-top:0; color:#111; font-size: 1.3rem;">Anteprima Elaborata Visual INFIX®</h3>
-            <p style="font-size: 12px; color: #666;">Simulazione grafica e rendering della finitura selezionata</p>
-            <div class="image-comparison">
-                <img id="afterImage" alt="Risultato Elaborato">
+            <h3 style="margin-top:0; color:#111; font-size: 1.3rem;">Confronto Visual INFIX®</h3>
+            <p id="resultSubtitle" style="font-size: 12px; color: #666; font-weight: bold;"></p>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h4>Stato Attuale (Prima)</h4>
+                    <img id="beforeImage" alt="Foto Originale">
+                </div>
+                <div class="comparison-item">
+                    <h4>Simulazione INFIX® (Dopo)</h4>
+                    <img id="afterImage" alt="Rendering Finitura">
+                </div>
             </div>
         </div>
     </div>
@@ -361,6 +384,8 @@
 
             const fileInput = document.getElementById('photoInput');
             const file = fileInput.files[0];
+            const product = document.getElementById('productSelect').options[document.getElementById('productSelectselectedIndex'] || document.getElementById('productSelect').selectedIndex].text;
+            const finish = document.getElementById('finishSelect').options[document.getElementById('finishSelect').selectedIndex].text;
 
             if (!file) {
                 alert("Per favore, seleziona o scatta prima una foto!");
@@ -368,17 +393,18 @@
             }
 
             const generateBtn = document.getElementById('generateBtn');
-            generateBtn.innerText = "Elaborazione visiva in corso...";
+            generateBtn.innerText = "Elaborazione simulazione AI in corso... 🎨";
             generateBtn.disabled = true;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 setTimeout(() => {
-                    const afterImage = document.getElementById('afterImage');
-                    afterImage.src = e.target.result;
+                    document.getElementById('beforeImage').src = e.target.result;
+                    document.getElementById('afterImage').src = e.target.result;
 
+                    document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
                     document.getElementById('resultArea').style.display = 'block';
-                    generateBtn.innerText = "Genera Simulazione Visual INFIX®";
+                    generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
                     generateBtn.disabled = false;
 
                     document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
