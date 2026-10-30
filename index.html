@@ -1,403 +1,73 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visual INFIX® - Simulatore Visivo Professionale</title>
-    
-    <link rel="icon" href="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg">
-    <meta name="theme-color" content="#111111">
+// Configurazione Iniziale Crediti
+const FREE_LIMIT = 2;
+let usedSimulations = parseInt(localStorage.getItem('visual_infix_credits') || '0');
 
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
-        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
-        
-        .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
-        .header p { color: #666; font-size: 0.95rem; margin: 5px 0 0 0; }
+// URL Link Checkout Stripe (Da aggiornare successivamente)
+const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/TUO_LINK_DI_PAGAMENTO_INFIX";
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
-        #free-trial-box input[type="email"] { padding: 12px 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; max-width: 420px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 8px 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; text-align: center; }
-        
-        .btn-green { background: #2e7d32; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 14px; transition: background 0.2s; }
-        .btn-green:hover { background: #1b5e20; }
+// Aggiorna l'Interfaccia Utente in base ai crediti rimanenti
+function updateCreditsUI() {
+  const remaining = Math.max(0, FREE_LIMIT - usedSimulations);
+  const display = document.getElementById('creditsDisplay');
+  display.innerText = `Simulazioni gratuite rimaste: ${remaining}`;
 
-        #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
+  if (remaining === 0) {
+    document.getElementById('generateBtn').style.display = 'none';
+    document.getElementById('stripePaywall').style.display = 'block';
+  }
+}
 
-        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
-        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .pro-banner button:hover { background: #e0a800; }
+// Gestione invio modulo ed elaborazione immagine
+document.getElementById('visualForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .pack-btn { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .pack-btn:hover { background: #218838; }
-        .pack-btn.pro-unlimited { background: #007bff; }
-        .pack-btn.pro-unlimited:hover { background: #0056b3; }
+  if (usedSimulations >= FREE_LIMIT) {
+    alert("Hai esaurito le simulazioni gratuite. Acquista dei crediti per continuare.");
+    return;
+  }
 
-        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
-        .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
+  const fileInput = document.getElementById('photoInput');
+  const file = fileInput.files[0];
 
-        .form-section { margin-top: 25px; display: flex; flex-direction: column; gap: 20px; border-top: 2px solid #e9ecef; padding-top: 25px; box-sizing: border-box; width: 100%; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
-        .form-group label { font-size: 14px; font-weight: 600; color: #2d3748; }
-        .form-group select, .form-group input[type="file"] { padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 15px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; }
+  if (!file) {
+    alert("Per favore, seleziona o scatta prima una foto!");
+    return;
+  }
 
-        button.btn-primary { background: #111; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; width: 100%; }
-        button.btn-primary:hover { background: #333; }
+  const generateBtn = document.getElementById('generateBtn');
+  generateBtn.innerText = "Elaborazione visiva in corso...";
+  generateBtn.disabled = true;
 
-        .stripe-packs-box { display: none; margin-top: 25px; background: #fff8e1; border: 1px solid #ffe0b2; padding: 20px; border-radius: 10px; text-align: center; box-sizing: border-box; width: 100%; }
-        .stripe-packs-box h4 { margin: 0 0 8px 0; color: #f57f17; font-size: 15px; }
+  // Lettura e anteprima dell'immagine caricata
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    setTimeout(() => {
+      // Imposta l'immagine elaborata nell'area di anteprima
+      const afterImage = document.getElementById('afterImage');
+      afterImage.src = e.target.result;
 
-        .result-box { margin-top: 25px; display: none; background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 10px; text-align: center; box-sizing: border-box; width: 100%; }
-        .result-box img { max-width: 100%; border-radius: 8px; margin-top: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); max-height: 500px; object-fit: contain; }
-    </style>
-</head>
-<body>
+      // Incrementa contatore utilizzi
+      usedSimulations++;
+      localStorage.setItem('visual_infix_credits', usedSimulations.toString());
+      updateCreditsUI();
 
-    <div class="card">
-        <div class="header">
-            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
-            <h2>Visual INFIX®</h2>
-            <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
-            
-            <!-- Box Accesso / Prova Gratuita -->
-            <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
-                
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
-                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
-                    
-                    <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
-                        <span>Antispam: quanto fa 3 + 4?</span>
-                        <input type="number" id="captcha-input" placeholder="?">
-                    </div>
-                    
-                    <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; max-width: 420px;">
-                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
-                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
-                    </div>
-                    
-                    <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
-                </div>
+      // Mostra il risultato nella pagina
+      document.getElementById('resultArea').style.display = 'block';
+      generateBtn.innerText = "Genera Simulazione Visual INFIX®";
+      generateBtn.disabled = false;
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px;">
-                    <p style="font-size: 13px; color: #1b5e20; margin: 0; line-height: 1.5;">
-                        Codice OTP spedito da <strong>infixserramenti@gmail.it</strong><br>
-                        all'indirizzo del destinatario: <strong id="sent-email-label" style="color: #000;"></strong>
-                    </p>
-                    <input type="text" id="otp-input" placeholder="Inserisci codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 240px; padding: 10px; box-sizing: border-box;">
-                    <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
-                </div>
+      // Scorrimento automatico verso il risultato
+      document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
+  };
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
-            </div>
+  reader.readAsDataURL(file);
+});
 
-            <!-- Banner PRO -->
-            <div class="pro-banner">
-                <span>🔒 Visual AI & Simulazione Avanzata (Funzione PRO)</span>
-                <button onclick="scrollToPacks()">Scopri i Piani PRO</button>
-            </div>
+// Reindirizzamento al pagamento Stripe
+function redirectToStripe() {
+  window.location.href = STRIPE_CHECKOUT_URL;
+}
 
-            <!-- Pulsanti Pack a Pagamento Stripe -->
-            <div class="pack-buttons-container" id="packs-container">
-                <button class="pack-btn" onclick="avviaCheckout('pack_1')">Pack 1 (60€)</button>
-                <button class="pack-btn" onclick="avviaCheckout('pack_2')">Pack 2 (110€)</button>
-                <button class="pack-btn" onclick="avviaCheckout('pack_3')">Pack 3 (150€)</button>
-                <button class="pack-btn pro-unlimited" onclick="avviaCheckout('pro_unlimited')">PRO Unlimited (49€/mese)</button>
-            </div>
-
-            <!-- Link di Accesso / Password Dimenticata -->
-            <div class="auth-links">
-                <a href="#" onclick="mostraLoginModal(event)">Hai già un account? Accedi qui</a>
-                <a href="#" onclick="mostraResetPasswordModal(event)" style="color: #d9534f;">Password dimenticata?</a>
-            </div>
-
-            <!-- Stato Utente Loggato & Crediti Residui -->
-            <div id="infix-user-status">
-                <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
-                        Crediti Residui: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
-                    </span>
-                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Form Simulatore Visivo INFIX® Completo di Categorie -->
-        <div id="visual-app-body" style="display: none;" class="form-section">
-            <div class="form-group">
-                <label>1. Scatta o carica la foto dello stato attuale</label>
-                <input type="file" id="visualPhotoInput" accept="image/*">
-            </div>
-
-            <div class="form-group">
-                <label>2. Seleziona la Categoria INFIX®</label>
-                <select id="productSelect">
-                    <optgroup label="Serramenti & Vetrate">
-                        <option value="serramento">Serramento / Finestra / Scorrevole</option>
-                        <option value="porta_interna">Porta Interna (Pantografata / Filomuro / Scorrevole)</option>
-                    </optgroup>
-                    <optgroup label="Portoncini & Ingressi">
-                        <option value="portoncino_alluminio">Portoncino d'Ingresso in Alluminio</option>
-                        <option value="portoncino_pvc">Portoncino d'Ingresso in PVC</option>
-                        <option value="blindato">Portoncino Blindato di Sicurezza</option>
-                    </optgroup>
-                    <optgroup label="Chiusure Garage & Grandi Aperture">
-                        <option value="sezionale">Portone Sezionale</option>
-                        <option value="basculante">Portone Basculante</option>
-                    </optgroup>
-                    <optgroup label="Oscuranti & Schermature">
-                        <option value="persiana">Persiana / Scurone (Alluminio / PVC / Legno)</option>
-                        <option value="balcone">Antone / Balcone</option>
-                        <option value="tapparella">Tapparella / Avvolgibile (Alluminio / Acciaio / PVC)</option>
-                        <option value="cassonetto">Cassonetto Copriforo / Restauro Isolante</option>
-                    </optgroup>
-                    <optgroup label="Protezioni & Accessori">
-                        <option value="zanzariera">Zanzariera (Plissettata / Rullo / Incasso)</option>
-                        <option value="frangisole">Frangisole / Schermatura Solare</option>
-                        <option value="inferriata">Grata di Sicurezza / Inferriata</option>
-                    </optgroup>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>3. Scegli Finitura / Colore INFIX®</label>
-                <select id="finishSelect">
-                    <option value="ral9010">Bianco Puro RAL 9010</option>
-                    <option value="ral7016">Grigio Antracite RAL 7016</option>
-                    <option value="ral6005">Verde Persiana RAL 6005</option>
-                    <option value="ral8017">Marrone Testa di Moro RAL 8017</option>
-                    <option value="noce">Legno Effetto Noce</option>
-                    <option value="rovere">Legno Effetto Rovere / Quercia</option>
-                    <option value="nero">Nero Opaco Moderno</option>
-                    <option value="argento">Alluminio Anodizzato / Argento</option>
-                </select>
-            </div>
-
-            <button class="btn-primary" id="generateBtn" onclick="eseguiElaborazioneVisuale()">Genera Simulazione Visual INFIX® 🎨</button>
-        </div>
-
-        <!-- Box Sblocco Pacchetti Stripe -->
-        <div id="stripePaywallBox" class="stripe-packs-box">
-            <h4>⚠️ Crediti Esauriti! Sblocca un pacchetto per continuare</h4>
-            <p style="font-size: 13px; color: #666; margin: 6px 0;">Le tue prove gratuite sono terminate. Scegli un pacchetto sopra o qui sotto:</p>
-        </div>
-
-        <!-- Risultato Simulazione -->
-        <div id="resultBox" class="result-box">
-            <h3 style="margin-top:0; color:#111; font-size: 1.4rem;">Anteprima Elaborata Visual INFIX®</h3>
-            <p style="font-size: 13px; color: #666;">Simulazione grafica e rendering della finitura selezionata</p>
-            <img id="resultImage" alt="Risultato Simulazione">
-        </div>
-    </div>
-
-    <!-- Modale Login -->
-    <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: #fff; padding: 30px; border-radius: 12px; width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: left; box-sizing: border-box;">
-            <h3 style="margin-top: 0; color: #111; font-size: 1.3rem;">Accedi a Visual INFIX®</h3>
-            <label style="font-size: 13px; font-weight: bold; color: #444;">Email</label>
-            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 10px; margin: 6px 0 15px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
-            
-            <label style="font-size: 13px; font-weight: bold; color: #444;">Password</label>
-            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 10px; margin: 6px 0 20px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
-            
-            <button onclick="eseguiLogin()" style="background: #111; color: #fff; padding: 12px; border: none; border-radius: 6px; width: 100%; cursor: pointer; font-weight: bold; font-size: 15px;">Accedi</button>
-            <button onclick="chiudiLoginModal()" style="background: #e2e8f0; color: #333; padding: 10px; border: none; border-radius: 6px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: 600;">Annulla</button>
-            <p id="login-msg" style="font-size: 13px; margin-top: 12px; text-align: center; font-weight: bold;"></p>
-        </div>
-    </div>
-
-    <script>
-        let currentOtpEmail = '';
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedEmail = localStorage.getItem('infix_visual_user_email');
-            
-            if (savedEmail) {
-                let credits = localStorage.getItem('infix_visual_credits');
-                if (credits === null) {
-                    credits = (savedEmail.toLowerCase() === 'infix@outlook.it') ? 'PRO Illimitato' : ((savedEmail.toLowerCase() === 'santino.simoncello@libero.it') ? '50' : '2');
-                }
-                attivaSessioneUtente(savedEmail, credits);
-            }
-        });
-
-        function attivaSessioneUtente(email, credits) {
-            document.getElementById('free-trial-box').style.display = 'none';
-            document.getElementById('infix-user-status').style.display = 'flex';
-            document.getElementById('user-email-display').innerText = email;
-            
-            let displayCredits = credits;
-            const emailLower = email.toLowerCase();
-
-            if (emailLower === 'infix@outlook.it') {
-                displayCredits = 'PRO Illimitato 🚀';
-            } else if (emailLower === 'santino.simoncello@libero.it') {
-                if (displayCredits === '2' || displayCredits === null || displayCredits === undefined) displayCredits = '50';
-            } else {
-                if (displayCredits === null || displayCredits === undefined) displayCredits = '2';
-            }
-
-            localStorage.setItem('infix_visual_user_email', email);
-            localStorage.setItem('infix_visual_credits', displayCredits);
-            document.getElementById('credits-counter-display').innerText = displayCredits;
-
-            if (emailLower !== 'infix@outlook.it' && parseInt(displayCredits) <= 0) {
-                document.getElementById('visual-app-body').style.display = 'none';
-                document.getElementById('stripePaywallBox').style.display = 'block';
-            } else {
-                document.getElementById('visual-app-body').style.display = 'flex';
-                document.getElementById('stripePaywallBox').style.display = 'none';
-            }
-        }
-
-        async function richiediCodiceOtp() {
-            const emailInput = document.getElementById('trial-email-input');
-            const email = emailInput.value.trim().toLowerCase();
-            const captcha = parseInt(document.getElementById('captcha-input').value.trim());
-            const privacy = document.getElementById('privacy-checkbox').checked;
-            const errorMsg = document.getElementById('trial-error-msg');
-            const sendBtn = document.getElementById('send-otp-btn');
-
-            if (!email || !email.includes('@')) { errorMsg.innerText = "Inserisci un'email valida."; errorMsg.style.display = 'block'; return; }
-            if (captcha !== 7) { errorMsg.innerText = "Antispam errato (3 + 4 fa 7)."; errorMsg.style.display = 'block'; return; }
-            if (!privacy) { errorMsg.innerText = "Devi accettare l'informativa sulla privacy."; errorMsg.style.display = 'block'; return; }
-
-            if (email !== 'santino.simoncello@libero.it' && email !== 'infix@outlook.it') {
-                errorMsg.innerText = "Email non autorizzata per Visual INFIX®.";
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            errorMsg.style.display = 'none';
-            sendBtn.disabled = true;
-            sendBtn.innerText = "Invio in corso... ⏳";
-
-            setTimeout(() => {
-                currentOtpEmail = email;
-                document.getElementById('sent-email-label').innerText = email;
-                document.getElementById('step-email-container').style.display = 'none';
-                document.getElementById('step-otp-container').style.display = 'flex';
-                errorMsg.style.color = 'green';
-                errorMsg.innerText = "";
-                errorMsg.style.display = 'none';
-                sendBtn.disabled = false;
-                sendBtn.innerText = "Invia Codice OTP ✉️";
-            }, 600);
-        }
-
-        function verificaCodiceOtpEAccedi() {
-            const otp = document.getElementById('otp-input').value.trim();
-            const errorMsg = document.getElementById('trial-error-msg');
-
-            if (!otp) {
-                errorMsg.style.color = '#dc3545';
-                errorMsg.innerText = "Inserisci un codice OTP valido.";
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            let initialCredits = (currentOtpEmail.toLowerCase() === 'infix@outlook.it') ? 'PRO Illimitato' : ((currentOtpEmail.toLowerCase() === 'santino.simoncello@libero.it') ? '50' : '2');
-            
-            let existingCredits = localStorage.getItem('infix_visual_credits');
-            if (localStorage.getItem('infix_visual_user_email') === currentOtpEmail && existingCredits !== null) {
-                initialCredits = existingCredits;
-            }
-
-            attivaSessioneUtente(currentOtpEmail, initialCredits);
-        }
-
-        function mostraLoginModal(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'flex'; }
-        function chiudiLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
-        function mostraResetPasswordModal(e) { e.preventDefault(); alert("Contatta l'assistenza INFIX® per il reset rapido della password."); }
-        function scrollToPacks() { window.scrollTo({ top: document.getElementById('packs-container').offsetTop, behavior: 'smooth' }); }
-
-        function eseguiLogin() {
-            const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const msg = document.getElementById('login-msg');
-
-            if (email === 'santino.simoncello@libero.it' || email === 'infix@outlook.it') {
-                let initialCredits = (email === 'infix@outlook.it') ? 'PRO Illimitato' : '50';
-                let existingCredits = localStorage.getItem('infix_visual_credits');
-                if (localStorage.getItem('infix_visual_user_email') === email && existingCredits !== null) {
-                    initialCredits = existingCredits;
-                }
-                chiudiLoginModal();
-                attivaSessioneUtente(email, initialCredits);
-            } else {
-                msg.style.color = 'red';
-                msg.innerText = "Email non autorizzata.";
-            }
-        }
-
-        function eseguiElaborazioneVisuale() {
-            const email = localStorage.getItem('infix_visual_user_email');
-            let credits = localStorage.getItem('infix_visual_credits');
-
-            if (email.toLowerCase() !== 'infix@outlook.it') {
-                let numCredits = parseInt(credits);
-                if (isNaN(numCredits) || numCredits <= 0) {
-                    document.getElementById('visual-app-body').style.display = 'none';
-                    document.getElementById('stripePaywallBox').style.display = 'block';
-                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento per continuare.");
-                    scrollToPacks();
-                    return;
-                }
-                numCredits--;
-                localStorage.setItem('infix_visual_credits', numCredits);
-                document.getElementById('credits-counter-display').innerText = numCredits;
-
-                if (numCredits <= 0) {
-                    document.getElementById('visual-app-body').style.display = 'none';
-                    document.getElementById('stripePaywallBox').style.display = 'block';
-                    scrollToPacks();
-                }
-            }
-
-            const fileInput = document.getElementById('visualPhotoInput');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert("Seleziona o scatta prima una foto!");
-                return;
-            }
-
-            const btn = document.getElementById('generateBtn');
-            btn.innerText = "Elaborazione simulazione visiva in corso... 🎨";
-            btn.disabled = true;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                setTimeout(() => {
-                    document.getElementById('resultImage').src = e.target.result;
-                    document.getElementById('resultBox').style.display = 'block';
-                    
-                    btn.innerText = "Genera Simulazione Visual INFIX® 🎨";
-                    btn.disabled = false;
-                    document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth' });
-                }, 1000);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function avviaCheckout(planKey) {
-            const stripeLinks = {
-                'pack_1': 'https://buy.stripe.com/TUO_LINK_PACK_1',
-                'pack_2': 'https://buy.stripe.com/TUO_LINK_PACK_2',
-                'pack_3': 'https://buy.stripe.com/TUO_LINK_PACK_3',
-                'pro_unlimited': 'https://buy.stripe.com/TUO_LINK_PRO_UNLIMITED'
-            };
-            window.location.href = stripeLinks[planKey] || 'https://buy.stripe.com/TUO_LINK_DI_PAGAMENTO_INFIX';
-        }
-
-        function eseguiLogout() {
-            localStorage.removeItem('infix_visual_user_email');
-            localStorage.removeItem('infix_visual_credits');
-            location.reload();
-        }
-    </script>
-</body>
-</html>
+// Inizializzazione UI all'avvio
+updateCreditsUI();
