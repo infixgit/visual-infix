@@ -9,34 +9,36 @@
     <meta name="theme-color" content="#111111">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
-        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 850px; margin: 30px auto; padding: 20px; background: #f4f4f9; color: #333; box-sizing: border-box; }
+        .card { background: white; padding: 40px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
         
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 20px; }
-        .logo { max-width: 100px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .header h2 { margin: 5px 0; font-size: 1.8rem; color: #111; }
-        .header p { color: #666; font-size: 0.95rem; margin: 5px 0 0 0; }
+        .logo { max-width: 110px; height: auto; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header h2 { margin: 5px 0; font-size: 1.9rem; color: #111; }
+        .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
-        #free-trial-box input[type="email"] { padding: 12px 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; max-width: 420px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; }
-        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 8px 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 13px; box-sizing: border-box; text-align: center; }
+        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 25px; border-radius: 10px; margin-top: 15px; font-size: 14px; color: #2e7d32; text-align: center; box-sizing: border-box; width: 100%; }
         
-        .btn-green { background: #2e7d32; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; font-size: 14px; transition: background 0.2s; }
+        /* Input email a larghezza piena e senza alcun taglio */
+        #free-trial-box input[type="email"] { padding: 14px; border: 1px solid #a5d6a7; border-radius: 6px; width: 100%; font-size: 15px; margin-bottom: 15px; box-sizing: border-box; background: #fff; }
+        #free-trial-box input[type="number"], #free-trial-box input[type="text"] { padding: 10px; border: 1px solid #a5d6a7; border-radius: 6px; font-size: 14px; box-sizing: border-box; text-align: center; background: #fff; }
+        
+        .btn-green { background: #2e7d32; color: white; border: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 15px; width: 100%; transition: background 0.2s; box-sizing: border-box; }
         .btn-green:hover { background: #1b5e20; }
 
-        #infix-user-status { background: #eef2f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
+        #infix-user-status { background: #eef2f5; padding: 14px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #333; border: 1px solid #dcdfe6; box-sizing: border-box; width: 100%; }
 
-        .pro-banner { background: #212529; color: white; padding: 12px 18px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
-        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .pro-banner { background: #212529; color: white; padding: 14px 18px; border-radius: 8px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600; box-sizing: border-box; width: 100%; }
+        .pro-banner button { background: #ffc107; color: #000; border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
         .pro-banner button:hover { background: #e0a800; }
 
-        .pack-buttons-container { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .pack-btn { background: #28a745; color: white; border: none; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .pack-buttons-container { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; width: 100%; box-sizing: border-box; }
+        .pack-btn { background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
         .pack-btn:hover { background: #218838; }
         .pack-btn.pro-unlimited { background: #007bff; }
         .pack-btn.pro-unlimited:hover { background: #0056b3; }
 
-        .auth-links { margin-top: 15px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
+        .auth-links { margin-top: 20px; display: flex; justify-content: center; gap: 20px; font-size: 13px; }
         .auth-links a { color: #0056b3; text-decoration: underline; font-weight: bold; }
 
         .form-section { margin-top: 25px; display: flex; flex-direction: column; gap: 20px; border-top: 2px solid #e9ecef; padding-top: 25px; box-sizing: border-box; width: 100%; }
@@ -59,14 +61,14 @@
     <div class="card">
         <div class="header">
             <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Logo INFIX" class="logo">
-            <h2>Visual INFIX®</h2>
+            <h2>Visual INFIX® (v2.6)</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Accesso / OTP / Prova Gratuita -->
+            <!-- Box Accesso / Prova Gratuita -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 12px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
+                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
                     <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
                     
                     <div style="font-size: 13px; color: #333; display: flex; align-items: center; gap: 8px;">
@@ -74,7 +76,7 @@
                         <input type="number" id="captcha-input" placeholder="?">
                     </div>
                     
-                    <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; max-width: 420px;">
+                    <div style="font-size: 13px; color: #444; display: flex; align-items: center; gap: 8px; text-align: left; width: 100%;">
                         <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
                         <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
                     </div>
@@ -82,16 +84,16 @@
                     <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px;">
+                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 12px; align-items: center; margin-top: 10px; width: 100%;">
                     <p style="font-size: 13px; color: #1b5e20; margin: 0; line-height: 1.5;">
                         Codice OTP spedito da <strong>infixserramenti@gmail.it</strong><br>
                         all'indirizzo del destinatario: <strong id="sent-email-label" style="color: #000;"></strong>
                     </p>
-                    <input type="text" id="otp-input" placeholder="Inserisci codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 240px; padding: 10px; box-sizing: border-box;">
+                    <input type="text" id="otp-input" placeholder="Inserisci codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 100%; max-width: 280px; padding: 12px; box-sizing: border-box;">
                     <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 8px; display: none; font-weight: bold;"></div>
+                <div id="trial-error-msg" style="color: #d9534f; font-size: 13px; margin-top: 10px; display: none; font-weight: bold;"></div>
             </div>
 
             <!-- Banner PRO -->
@@ -221,7 +223,6 @@
     <script>
         let currentOtpEmail = '';
 
-        // Inizializzazione all'avvio: verifica se l'utente è già loggato in precedenza
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('infix_visual_user_email');
             const savedCredits = localStorage.getItem('infix_visual_credits');
@@ -256,7 +257,6 @@
             localStorage.setItem('infix_visual_credits', displayCredits);
             document.getElementById('credits-counter-display').innerText = displayCredits;
 
-            // Controllo paywall Stripe se crediti esauriti
             if (emailLower !== 'infix@outlook.it' && parseInt(displayCredits) <= 0) {
                 document.getElementById('visualForm').style.display = 'none';
                 document.getElementById('stripePaywall').style.display = 'block';
@@ -341,7 +341,6 @@
             }
         }
 
-        // Gestione invio modulo ed elaborazione immagine con consumo crediti
         document.getElementById('visualForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
