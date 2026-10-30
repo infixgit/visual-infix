@@ -72,10 +72,11 @@
             </div>
 
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #1b5e20;">🎁 PROVA GRATUITA 2 CONSULENZE</div>
                 
                 <div id="step-email-container" style="display: flex; flex-direction: column; gap: 8px; align-items: center; width: 100%;">
-                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. nome@esempio.it)">
+                    <!-- Segnaposto pulito con solo "Inserisci la tua email..." -->
+                    <input type="email" id="trial-email-input" placeholder="Inserisci la tua email...">
                     
                     <div style="font-size: 12px; color: #333; display: flex; align-items: center; gap: 6px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
@@ -84,7 +85,7 @@
                     
                     <div style="font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px; text-align: left; width: 100%;">
                         <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 14px; height: 14px;">
-                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e trattamento dati.</label>
+                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa sulla privacy e il trattamento dei dati.</label>
                     </div>
                     
                     <button id="send-otp-btn" class="btn-green" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
@@ -444,4 +445,14 @@
                 'pack_3': 'https://buy.stripe.com/TUO_LINK_PACK_3',
                 'pro_unlimited': 'https://buy.stripe.com/TUO_LINK_PRO_UNLIMITED'
             };
-            window.location.href = stripeLinks[planKey] ||
+            window.location.href = stripeLinks[planKey] || "https://buy.stripe.com/TUO_LINK_DI_PAGAMENTO_INFIX";
+        }
+
+        function eseguiLogout() {
+            localStorage.removeItem('infix_visual_user_email');
+            localStorage.removeItem('infix_visual_credits');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
