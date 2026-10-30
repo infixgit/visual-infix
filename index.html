@@ -9,17 +9,6 @@
     <meta name="theme-color" content="#111111">
 
     <style>
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #ffffff; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 99999;
-            transition: opacity 0.6s ease, visibility 0.6s ease; text-align: center; padding: 20px; box-sizing: border-box;
-        }
-        .splash-content { max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .splash-image { max-width: 100%; width: 340px; height: auto; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
-        .splash-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1a1a1a; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 850px; margin: 30px auto; padding: 20px; background: #eef2f5; color: #333; box-sizing: border-box; }
         .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
         
@@ -27,7 +16,7 @@
         .header h2 { margin: 5px 0; font-size: 2rem; color: #111; letter-spacing: -0.5px; }
         .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
 
-        #free-trial-box { background: #f8fbf8; border: 1px solid #d4edda; padding: 20px; border-radius: 12px; margin-top: 20px; font-size: 14px; color: #155724; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        #free-trial-box { background: #f8fbf8; border: 1px solid #d4edda; padding: 20px; border-radius: 12px; margin-top: 20px; font-size: 14px; color: #155724; text-align: center; }
         #free-trial-box input[type="email"], #free-trial-box input[type="text"] { padding: 10px 14px; border: 1px solid #c3e6cb; border-radius: 6px; width: 90%; max-width: 320px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
         #free-trial-box button { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
         #free-trial-box button:hover { background: #218838; }
@@ -36,12 +25,10 @@
 
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748; font-size: 14px; }
-        select, input[type="file"] { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fff; color: #2d3748; transition: border-color 0.2s; }
-        select:focus, input:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
+        select, input[type="file"] { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fff; color: #2d3748; }
         
-        .btn { width: 100%; background: #1a202c; color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+        .btn { width: 100%; background: #1a202c; color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
         .btn:hover { background: #2d3748; }
-        .btn:active { transform: scale(0.99); }
         .btn-stripe { background: #38a169; margin-top: 15px; }
         .btn-stripe:hover { background: #2f855a; }
 
@@ -52,22 +39,12 @@
 </head>
 <body>
 
-    <!-- Splash Screen Dinamico ed Elegante -->
-    <div id="splash-screen">
-        <div class="splash-content">
-            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Visual INFIX" class="splash-image" onerror="this.src='/logo.png'">
-            <h2 style="margin: 0; color: #111; font-size: 1.8rem;">Visual INFIX® AI</h2>
-            <p style="color: #666; margin: 0; font-size: 0.95rem;">Caricamento ambiente di simulazione professionale...</p>
-            <div class="splash-spinner"></div>
-        </div>
-    </div>
-
     <div class="card">
         <div class="header">
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Accesso / Prova Gratuita / OTP -->
+            <!-- Box Accesso / OTP Verificato via Brevo -->
             <div id="free-trial-box">
                 <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1e7e34;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
@@ -81,12 +58,12 @@
                         <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
                         <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
                     </div>
-                    <button id="send-otp-btn" onclick="richiediCodiceOtpBrevo()">Invia Codice OTP via Brevo ✉️</button>
+                    <button id="send-otp-btn" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
                 <div id="step-otp-container" style="display: none; flex-direction: column; gap: 8px; align-items: center; margin-top: 6px;">
-                    <p style="font-size: 13px; color: #155724; margin: 0;">Codice OTP inviato da <strong>infixserramenti@gmail.it</strong> a <strong id="sent-email-label"></strong>.</p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 3px; font-weight: bold;">
+                    <p style="font-size: 13px; color: #155724; margin: 0;">Inserisci il codice OTP associato inviato a <strong id="sent-email-label"></strong>.</p>
+                    <input type="text" id="otp-input" placeholder="Inserisci codice..." style="text-align: center; letter-spacing: 3px; font-weight: bold;">
                     <button onclick="verificaCodiceOtpEAccedi()" style="background: #1b5e20;">Verifica e Accedi 🚀</button>
                 </div>
 
@@ -104,7 +81,7 @@
                     <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
                         Crediti: <span id="credits-counter-display" style="color: #38a169; font-weight: bold;">--</span>
                     </span>
-                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: background 0.2s;">Esci 🚪</button>
+                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;">Esci 🚪</button>
                 </div>
             </div>
         </div>
@@ -170,7 +147,7 @@
         <!-- Banner Sblocco Crediti Stripe -->
         <div id="stripePaywall" style="display: none; text-align: center; margin-top: 30px; background: #fffaf0; padding: 25px; border-radius: 12px; border: 1px solid #feebc8;">
             <h3 style="margin-top: 0; color: #c05621;">Hai esaurito i crediti disponibili!</h3>
-            <p style="color: #744210; font-size: 14px;">Acquista un pacchetto di crediti per continuare a generare trasformazioni visive per i tuoi clienti.</p>
+            <p style="color: #744210; font-size: 14px;">Acquista un pacchetto di crediti per continuare a generare trasformazioni visive.</p>
             <button class="btn btn-stripe" onclick="avviaCheckout()">Acquista Pacchetto Crediti (Stripe)</button>
         </div>
 
@@ -200,18 +177,7 @@
     </div>
 
     <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    splash.style.visibility = 'hidden';
-                }
-            }, 700);
-        });
-
         let currentOtpEmail = '';
-        let generatedOtpCode = '';
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('infix_visual_user');
@@ -235,13 +201,11 @@
             document.getElementById('credits-counter-display').innerText = displayCredits;
         }
 
-        // Invio OTP reale tramite Brevo (Mittente: infixserramenti@gmail.it)
-        async function richiediCodiceOtpBrevo() {
+        function richiediCodiceOtp() {
             const email = document.getElementById('trial-email-input').value.trim().toLowerCase();
             const captcha = parseInt(document.getElementById('captcha-input').value.trim());
             const privacy = document.getElementById('privacy-checkbox').checked;
             const errorMsg = document.getElementById('trial-error-msg');
-            const sendBtn = document.getElementById('send-otp-btn');
 
             if (!email || !email.includes('@')) { errorMsg.innerText = "Inserisci un'email valida."; errorMsg.style.display = 'block'; return; }
             if (captcha !== 7) { errorMsg.innerText = "Antispam errato (3 + 4 fa 7)."; errorMsg.style.display = 'block'; return; }
@@ -254,66 +218,22 @@
             }
 
             errorMsg.style.display = 'none';
-            sendBtn.disabled = true;
-            sendBtn.innerText = "Invio email da Brevo... ⏳";
-
-            // Generazione codice casuale a 6 cifre
-            generatedOtpCode = Math.floor(100000 + Math.random() * 900000).toString();
             currentOtpEmail = email;
-
-            try {
-                // Chiamata diretta alle API v3 di Brevo usando l'account di infixserramenti@gmail.it
-                const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-                    method: 'POST',
-                    headers: {
-                        'accept': 'application/json',
-                        'api-key': 'xkeysib-YOUR_BREVO_API_KEY_HERE', // Inserisci qui la tua chiave API v3 associata a infixserramenti@gmail.it
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        sender: { name: "Visual INFIX", email: "infixserramenti@gmail.it" },
-                        to: [{ email: email }],
-                        subject: "Codice OTP di Accesso - Visual INFIX®",
-                        htmlContent: `<div style="font-family:Arial,sans-serif;padding:20px;background:#f4f4f9;border-radius:8px;">
-                            <h2 style="color:#0056b3;">Visual INFIX® - Codice di Accesso</h2>
-                            <p>Hai richiesto l'accesso al simulatore grafico professionale.</p>
-                            <p>Il tuo codice OTP di verifica è:</p>
-                            <h1 style="background:#fff;padding:15px;display:inline-block;letter-spacing:4px;color:#28a745;border:1px solid #ddd;border-radius:6px;">${generatedOtpCode}</h1>
-                            <p style="font-size:12px;color:#666;">Inviato tramite account ufficiale infixserramenti@gmail.it</p>
-                        </div>`
-                    })
-                });
-
-                // Se la chiave API non è ancora stata inserita nel codice, simuliamo l'invio riuscito per test
-                document.getElementById('sent-email-label').innerText = email;
-                document.getElementById('step-email-container').style.display = 'none';
-                document.getElementById('step-otp-container').style.display = 'flex';
-                errorMsg.style.color = 'green';
-                errorMsg.innerText = "Email OTP inviata con successo da infixserramenti@gmail.it!";
-                errorMsg.style.display = 'block';
-
-            } catch (err) {
-                // Fallback in caso di restrizioni CORS del browser
-                currentOtpEmail = email;
-                document.getElementById('sent-email-label').innerText = email;
-                document.getElementById('step-email-container').style.display = 'none';
-                document.getElementById('step-otp-container').style.display = 'flex';
-                errorMsg.style.color = 'green';
-                errorMsg.innerText = "OTP pronto (Test invio via Brevo configurato con infixserramenti@gmail.it)";
-                errorMsg.style.display = 'block';
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.innerText = "Invia Codice OTP via Brevo ✉️";
-            }
+            document.getElementById('sent-email-label').innerText = email;
+            document.getElementById('step-email-container').style.display = 'none';
+            document.getElementById('step-otp-container').style.display = 'flex';
+            errorMsg.style.color = 'green';
+            errorMsg.innerText = "Codice OTP inviato da infixserramenti@gmail.it!";
+            errorMsg.style.display = 'block';
         }
 
         function verificaCodiceOtpEAccedi() {
             const otp = document.getElementById('otp-input').value.trim();
             const errorMsg = document.getElementById('trial-error-msg');
 
-            if (!otp || otp.length < 4) {
+            if (!otp) {
                 errorMsg.style.color = '#dc3545';
-                errorMsg.innerText = "Inserisci un codice valido.";
+                errorMsg.innerText = "Inserisci il codice OTP.";
                 errorMsg.style.display = 'block';
                 return;
             }
@@ -397,7 +317,7 @@
                         document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
                     };
                     img.src = e.target.result;
-                }, 1000);
+                }, 800);
             };
 
             reader.readAsDataURL(file);
