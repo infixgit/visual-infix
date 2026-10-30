@@ -6,81 +6,105 @@
     <title>Visual INFIX® - Simulatore Visivo Professionale</title>
     
     <link rel="icon" href="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#111111">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 20px auto; padding: 15px; background: #f4f4f9; display: flex; flex-direction: column; box-sizing: border-box; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffffff; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 99999;
+            transition: opacity 0.6s ease, visibility 0.6s ease; text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        .splash-content { max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .splash-image { max-width: 100%; width: 340px; height: auto; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .splash-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1a1a1a; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 850px; margin: 30px auto; padding: 20px; background: #eef2f5; color: #333; box-sizing: border-box; }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
         
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #e9ecef; padding-bottom: 15px; }
-        .header h2 { margin: 5px 0; font-size: 1.6rem; color: #0056b3; }
-        .header p { color: #666; font-size: 0.95rem; margin: 0; }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f5; padding-bottom: 20px; }
+        .header h2 { margin: 5px 0; font-size: 2rem; color: #111; letter-spacing: -0.5px; }
+        .header p { color: #666; font-size: 1rem; margin: 5px 0 0 0; }
 
-        #free-trial-box { background: #e8f5e9; border: 1px solid #c8e6c9; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 13px; color: #2e7d32; text-align: center; }
-        #free-trial-box input[type="email"], #free-trial-box input[type="text"] { padding: 9px; border: 1px solid #a5d6a7; border-radius: 4px; width: 85%; max-width: 280px; font-size: 13px; margin-bottom: 8px; box-sizing: border-box; }
-        #free-trial-box button { background: #2e7d32; color: white; border: none; padding: 9px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+        #free-trial-box { background: #f8fbf8; border: 1px solid #d4edda; padding: 20px; border-radius: 12px; margin-top: 20px; font-size: 14px; color: #155724; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+        #free-trial-box input[type="email"], #free-trial-box input[type="text"] { padding: 10px 14px; border: 1px solid #c3e6cb; border-radius: 6px; width: 90%; max-width: 320px; font-size: 14px; margin-bottom: 10px; box-sizing: border-box; }
+        #free-trial-box button { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        #free-trial-box button:hover { background: #218838; }
 
-        #infix-user-status { background: #eef2f5; padding: 10px 15px; border-radius: 6px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 13px; font-weight: bold; color: #333; }
+        #infix-user-status { background: #f1f3f5; padding: 12px 20px; border-radius: 8px; margin-top: 15px; display: none; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #212529; border: 1px solid #e2e8f0; }
 
-        .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px; }
-        select, input[type="file"] { width: 100%; padding: 11px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 15px; background: #fff; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748; font-size: 14px; }
+        select, input[type="file"] { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; background: #fff; color: #2d3748; transition: border-color 0.2s; }
+        select:focus, input:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.15); }
         
-        .btn { width: 100%; background: #0056b3; color: #fff; padding: 14px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-        .btn:hover { background: #004085; }
-        .btn-stripe { background: #28a745; margin-top: 10px; }
-        .btn-stripe:hover { background: #218838; }
+        .btn { width: 100%; background: #1a202c; color: #fff; padding: 15px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+        .btn:hover { background: #2d3748; }
+        .btn:active { transform: scale(0.99); }
+        .btn-stripe { background: #38a169; margin-top: 15px; }
+        .btn-stripe:hover { background: #2f855a; }
 
-        .preview-container { margin-top: 25px; display: none; text-align: center; border-top: 2px solid #e9ecef; padding-top: 20px; }
-        .image-comparison { position: relative; width: 100%; max-height: 550px; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15); background: #000; }
-        .image-comparison img { width: 100%; display: block; object-fit: contain; max-height: 500px; }
+        .preview-container { margin-top: 30px; display: none; text-align: center; border-top: 2px solid #f0f0f5; padding-top: 25px; }
+        .image-comparison { position: relative; width: 100%; max-height: 600px; overflow: hidden; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); background: #000; }
+        .image-comparison img { width: 100%; display: block; object-fit: contain; max-height: 550px; }
     </style>
 </head>
 <body>
+
+    <!-- Splash Screen Dinamico ed Elegante -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="https://www.infix.it/it/wp-content/uploads/bussola-infix-marchio-figurativo-momento-di-intervenire.jpg" alt="Visual INFIX" class="splash-image" onerror="this.src='/logo.png'">
+            <h2 style="margin: 0; color: #111; font-size: 1.8rem;">Visual INFIX® AI</h2>
+            <p style="color: #666; margin: 0; font-size: 0.95rem;">Caricamento ambiente di simulazione professionale...</p>
+            <div class="splash-spinner"></div>
+        </div>
+    </div>
 
     <div class="card">
         <div class="header">
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Prova Gratuita / OTP -->
+            <!-- Box Accesso / Prova Gratuita / OTP -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 8px;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1e7e34;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
-                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
+                <div id="step-email-container" style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
                     <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
-                    <div style="font-size: 11px; color: #333; display: flex; align-items: center; gap: 5px;">
+                    <div style="font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px;">
                         <span>Antispam: quanto fa 3 + 4?</span>
-                        <input type="number" id="captcha-input" placeholder="?" style="width: 40px; padding: 3px; text-align: center; border: 1px solid #ccc; border-radius: 4px; font-size: 11px;">
+                        <input type="number" id="captcha-input" placeholder="?" style="width: 45px; padding: 4px; text-align: center; border: 1px solid #c3e6cb; border-radius: 4px; font-size: 12px;">
                     </div>
-                    <div style="font-size: 11px; color: #444; display: flex; align-items: center; gap: 5px; text-align: left; max-width: 290px;">
-                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer;">
-                        <label for="privacy-checkbox" style="cursor: pointer;">Accetto l'informativa privacy e il trattamento dati.</label>
+                    <div style="font-size: 12px; color: #444; display: flex; align-items: center; gap: 6px; text-align: left; max-width: 320px; margin-top: 4px;">
+                        <input type="checkbox" id="privacy-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
+                        <label for="privacy-checkbox" style="cursor: pointer; margin: 0;">Accetto l'informativa privacy e il trattamento dati.</label>
                     </div>
                     <button id="send-otp-btn" onclick="richiediCodiceOtp()">Invia Codice OTP ✉️</button>
                 </div>
 
-                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 6px; align-items: center; margin-top: 4px;">
-                    <p style="font-size: 12px; color: #2e7d32; margin: 0;">Codice OTP inviato a <strong id="sent-email-label"></strong>.</p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 2px; font-weight: bold;">
+                <div id="step-otp-container" style="display: none; flex-direction: column; gap: 8px; align-items: center; margin-top: 6px;">
+                    <p style="font-size: 13px; color: #155724; margin: 0;">Codice OTP inviato a <strong id="sent-email-label"></strong>.</p>
+                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="text-align: center; letter-spacing: 3px; font-weight: bold;">
                     <button onclick="verificaCodiceOtpEAccedi()" style="background: #1b5e20;">Verifica e Accedi 🚀</button>
                 </div>
 
-                <div id="trial-error-msg" style="color: #d9534f; font-size: 11px; margin-top: 4px; display: none;"></div>
+                <div id="trial-error-msg" style="color: #dc3545; font-size: 12px; margin-top: 6px; display: none; font-weight: bold;"></div>
 
-                <div style="margin-top: 12px; font-size: 12px;">
+                <div style="margin-top: 15px; font-size: 13px;">
                     <a href="#" onclick="mostraLoginModal(event)" style="color: #0056b3; text-decoration: underline; font-weight: bold;">Hai già un account? Accedi con Password</a>
                 </div>
             </div>
 
             <!-- Stato Utente Loggato -->
             <div id="infix-user-status">
-                <span>Utente: <span id="user-email-display" style="color: #0056b3;">-</span></span>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <span style="background: #fff; padding: 4px 10px; border-radius: 4px; border: 1px solid #ddd;">
-                        Crediti: <span id="credits-counter-display" style="color: #28a745; font-weight: bold;">--</span>
+                <span>Utente: <span id="user-email-display" style="color: #2b6cb0;">-</span></span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span style="background: #fff; padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e0; font-size: 13px;">
+                        Crediti: <span id="credits-counter-display" style="color: #38a169; font-weight: bold;">--</span>
                     </span>
-                    <button onclick="eseguiLogout()" style="background: #dc3545; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">Esci 🚪</button>
+                    <button onclick="eseguiLogout()" style="background: #e53e3e; color: #fff; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: background 0.2s;">Esci 🚪</button>
                 </div>
             </div>
         </div>
@@ -144,15 +168,15 @@
         </form>
 
         <!-- Banner Sblocco Crediti Stripe -->
-        <div id="stripePaywall" style="display: none; text-align: center; margin-top: 25px; background: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba;">
-            <h3 style="margin-top: 0; color: #856404;">Hai esaurito i crediti disponibili!</h3>
-            <p style="color: #856404;">Acquista un pacchetto di crediti per continuare a generare trasformazioni visive per i tuoi clienti.</p>
+        <div id="stripePaywall" style="display: none; text-align: center; margin-top: 30px; background: #fffaf0; padding: 25px; border-radius: 12px; border: 1px solid #feebc8;">
+            <h3 style="margin-top: 0; color: #c05621;">Hai esaurito i crediti disponibili!</h3>
+            <p style="color: #744210; font-size: 14px;">Acquista un pacchetto di crediti per continuare a generare trasformazioni visive per i tuoi clienti.</p>
             <button class="btn btn-stripe" onclick="avviaCheckout()">Acquista Pacchetto Crediti (Stripe)</button>
         </div>
 
         <!-- Area Risultato -->
         <div class="preview-container" id="resultArea">
-            <h3 style="margin-top: 0; color: #0056b3;">Risultato Simulazione Visual INFIX®</h3>
+            <h3 style="margin-top: 0; color: #1a202c; font-size: 1.3rem;">Risultato Simulazione Visual INFIX®</h3>
             <div class="image-comparison">
                 <img id="afterImage" alt="Risultato Elaborato">
             </div>
@@ -160,22 +184,33 @@
     </div>
 
     <!-- Modale Login con Password -->
-    <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;">
-        <div style="background: #fff; padding: 25px; border-radius: 8px; width: 320px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: left;">
-            <h3 style="margin-top: 0; color: #333;">Accedi a Visual INFIX®</h3>
-            <label style="font-size: 12px; font-weight: bold; color: #555;">Email</label>
-            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 8px; margin: 5px 0 12px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+    <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: #fff; padding: 30px; border-radius: 14px; width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); text-align: left;">
+            <h3 style="margin-top: 0; color: #111; font-size: 1.4rem;">Accedi a Visual INFIX®</h3>
+            <label style="font-size: 13px; font-weight: bold; color: #4a5568;">Email</label>
+            <input type="email" id="login-email" placeholder="nome@email.com" style="width: 100%; padding: 10px; margin: 6px 0 15px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
             
-            <label style="font-size: 12px; font-weight: bold; color: #555;">Password</label>
-            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 8px; margin: 5px 0 15px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" />
+            <label style="font-size: 13px; font-weight: bold; color: #4a5568;">Password</label>
+            <input type="password" id="login-password" placeholder="La tua password" style="width: 100%; padding: 10px; margin: 6px 0 20px 0; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;" />
             
-            <button onclick="eseguiLoginPassword()" style="background: #0056b3; color: #fff; padding: 10px; border: none; border-radius: 4px; width: 100%; cursor: pointer; font-weight: bold;">Accedi</button>
-            <button onclick="chiudiLoginModal()" style="background: #e0e0e0; color: #333; padding: 8px; border: none; border-radius: 4px; width: 100%; margin-top: 8px; cursor: pointer;">Annulla</button>
-            <p id="login-msg" style="font-size: 13px; margin-top: 10px; text-align: center;"></p>
+            <button onclick="eseguiLoginPassword()" style="background: #1a202c; color: #fff; padding: 12px; border: none; border-radius: 6px; width: 100%; cursor: pointer; font-weight: bold; font-size: 15px;">Accedi</button>
+            <button onclick="chiudiLoginModal()" style="background: #e2e8f0; color: #2d3748; padding: 10px; border: none; border-radius: 6px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: 600;">Annulla</button>
+            <p id="login-msg" style="font-size: 13px; margin-top: 12px; text-align: center; font-weight: bold;"></p>
         </div>
     </div>
 
     <script>
+        // Chiusura automatica dello splash screen elegante
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    splash.style.visibility = 'hidden';
+                }
+            }, 700);
+        });
+
         let currentOtpEmail = '';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -239,7 +274,7 @@
             const errorMsg = document.getElementById('trial-error-msg');
 
             if (!otp || otp.length < 4) {
-                errorMsg.style.color = '#d9534f';
+                errorMsg.style.color = '#dc3545';
                 errorMsg.innerText = "Inserisci un codice valido.";
                 errorMsg.style.display = 'block';
                 return;
@@ -307,7 +342,7 @@
                         const ctx = canvas.getContext('2d');
                         
                         ctx.drawImage(img, 0, 0);
-                        ctx.fillStyle = 'rgba(0, 86, 179, 0.08)';
+                        ctx.fillStyle = 'rgba(26, 32, 44, 0.08)';
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                         document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
