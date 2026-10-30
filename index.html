@@ -62,9 +62,9 @@
             <h2>Visual INFIX®</h2>
             <p>Simulatore Grafico Professionale "Prima / Dopo" per Serramenti e Finiture</p>
             
-            <!-- Box Accesso / Prova Gratuita in stile Bussola -->
+            <!-- Box Accesso / Prova Gratuita -->
             <div id="free-trial-box">
-                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🎁 PROVA GRATUITA 2 CREDITI / SIMULAZIONI</div>
+                <div style="font-weight: bold; margin-bottom: 10px; font-size: 15px; color: #1b5e20;">🔐 ACCESSO AUTORIZZATO VISUAL INFIX®</div>
                 
                 <div id="step-email-container" style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
                     <input type="email" id="trial-email-input" placeholder="Inserisci la tua email (es. santino.simoncello@libero.it)">
@@ -83,8 +83,11 @@
                 </div>
 
                 <div id="step-otp-container" style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-top: 8px;">
-                    <p style="font-size: 14px; color: #1b5e20; margin: 0;">Codice OTP inviato da infixserramenti@gmail.it a <strong id="sent-email-label"></strong>.</p>
-                    <input type="text" id="otp-input" placeholder="Codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 220px; padding: 10px; box-sizing: border-box;">
+                    <p style="font-size: 13px; color: #1b5e20; margin: 0; line-height: 1.5;">
+                        Codice OTP spedito da <strong>infixserramenti@gmail.it</strong><br>
+                        all'indirizzo del destinatario: <strong id="sent-email-label" style="color: #000;"></strong>
+                    </p>
+                    <input type="text" id="otp-input" placeholder="Inserisci codice a 6 cifre..." style="letter-spacing: 3px; font-weight: bold; width: 240px; padding: 10px; box-sizing: border-box;">
                     <button onclick="verificaCodiceOtpEAccedi()" class="btn-green">Verifica e Accedi 🚀</button>
                 </div>
 
@@ -263,6 +266,12 @@
             if (captcha !== 7) { errorMsg.innerText = "Antispam errato (3 + 4 fa 7)."; errorMsg.style.display = 'block'; return; }
             if (!privacy) { errorMsg.innerText = "Devi accettare l'informativa sulla privacy."; errorMsg.style.display = 'block'; return; }
 
+            if (email !== 'santino.simoncello@libero.it' && email !== 'infix@outlook.it') {
+                errorMsg.innerText = "Email non autorizzata per Visual INFIX®.";
+                errorMsg.style.display = 'block';
+                return;
+            }
+
             errorMsg.style.display = 'none';
             sendBtn.disabled = true;
             sendBtn.innerText = "Invio in corso... ⏳";
@@ -273,8 +282,8 @@
                 document.getElementById('step-email-container').style.display = 'none';
                 document.getElementById('step-otp-container').style.display = 'flex';
                 errorMsg.style.color = 'green';
-                errorMsg.innerText = "Codice OTP inviato via email da infixserramenti@gmail.it!";
-                errorMsg.style.display = 'block';
+                errorMsg.innerText = "";
+                errorMsg.style.display = 'none';
                 sendBtn.disabled = false;
                 sendBtn.innerText = "Invia Codice OTP ✉️";
             }, 600);
@@ -310,8 +319,8 @@
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const msg = document.getElementById('login-msg');
 
-            if (email && email.includes('@')) {
-                let initialCredits = (email === 'infix@outlook.it') ? 'PRO Illimitato' : ((email === 'santino.simoncello@libero.it') ? '50' : '2');
+            if (email === 'santino.simoncello@libero.it' || email === 'infix@outlook.it') {
+                let initialCredits = (email === 'infix@outlook.it') ? 'PRO Illimitato' : '50';
                 let existingCredits = localStorage.getItem('infix_visual_credits');
                 if (localStorage.getItem('infix_visual_user_email') === email && existingCredits !== null) {
                     initialCredits = existingCredits;
@@ -320,7 +329,7 @@
                 attivaSessioneUtente(email, initialCredits);
             } else {
                 msg.style.color = 'red';
-                msg.innerText = "Inserisci un'email valida.";
+                msg.innerText = "Email non autorizzata.";
             }
         }
 
@@ -333,7 +342,7 @@
                 if (isNaN(numCredits) || numCredits <= 0) {
                     document.getElementById('visual-app-body').style.display = 'none';
                     document.getElementById('stripePaywallBox').style.display = 'block';
-                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento qui sotto per continuare.");
+                    alert("⚠️ Crediti esauriti! Sblocca un pacchetto a pagamento per continuare.");
                     scrollToPacks();
                     return;
                 }
