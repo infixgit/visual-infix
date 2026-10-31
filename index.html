@@ -405,7 +405,6 @@
             const fileInput = document.getElementById('photoInput');
             const file = fileInput.files[0];
             const productSelect = document.getElementById('productSelect');
-            const productVal = productSelect.value;
             const product = productSelect.options[productSelect.selectedIndex].text;
             const finishSelect = document.getElementById('finishSelect');
             const finishValue = finishSelect.value;
@@ -436,51 +435,32 @@
                     // 2. Disegna l'immagine base del "Prima"
                     ctx.drawImage(img, 0, 0);
 
-                    // 3. Selezione del colore di finitura INFIX®
-                    let hexColor = '#f8f9fa'; // Default Bianco Puro
-                    if (finishValue.includes('7016') || finishValue.includes('argento')) {
-                        hexColor = '#374151'; // Antracite / Grigio
-                    } else if (finishValue.includes('noce') || finishValue.includes('rovere') || finishValue.includes('8017')) {
-                        hexColor = '#5c3a21'; // Legno / Marrone
-                    } else if (finishValue.includes('6005')) {
-                        hexColor = '#1b4332'; // Verde persiana
-                    } else if (finishValue.includes('nero')) {
-                        hexColor = '#111827'; // Nero opaco
-                    }
-
-                    // 4. Rendering adattivo in base al prodotto selezionato
+                    // 3. Coordinate dell'area centrale del portone/serramento
                     const boxX = canvas.width * 0.22;
                     const boxY = canvas.height * 0.40;
                     const boxW = canvas.width * 0.56;
                     const boxH = canvas.height * 0.50;
 
-                    ctx.fillStyle = hexColor;
-                    ctx.fillRect(boxX, boxY, boxW, boxH);
-
-                    // Dettagli specifici per tipo di prodotto
-                    ctx.strokeStyle = finishValue.includes('9010') ? '#d1d5db' : '#1f2937';
-                    ctx.lineWidth = Math.max(2, canvas.width / 250);
-                    ctx.strokeRect(boxX, boxY, boxW, boxH);
-
-                    if (productVal === 'sezionale' || productVal === 'basculante') {
-                        // Linee orizzontali per portoni garage
-                        const numPanels = productVal === 'sezionale' ? 4 : 5;
-                        for (let i = 1; i < numPanels; i++) {
-                            let lineY = boxY + (boxH / numPanels) * i;
-                            ctx.beginPath();
-                            ctx.moveTo(boxX, lineY);
-                            ctx.lineTo(boxX + boxW, lineY);
-                            ctx.stroke();
-                        }
-                    } else if (productVal === 'serramento' || productVal === 'persiana') {
-                        // Griglia verticale/orizzontale per finestre o persiane
-                        ctx.beginPath();
-                        ctx.moveTo(boxX + boxW / 2, boxY);
-                        ctx.lineTo(boxX + boxW / 2, boxY + boxH);
-                        ctx.moveTo(boxX, boxY + boxH / 2);
-                        ctx.lineTo(boxX + boxW, boxY + boxH / 2);
-                        ctx.stroke();
+                    // 4. Colore di tintura in base alla finitura scelta (trasparente/sovrapposto per mantenere ombre e texture)
+                    let tintColor = 'rgba(255, 255, 255, 0.45)'; // Bianco Puro
+                    if (finishValue.includes('7016') || finishValue.includes('argento')) {
+                        tintColor = 'rgba(70, 80, 90, 0.5)'; // Antracite
+                    } else if (finishValue.includes('noce') || finishValue.includes('rovere') || finishValue.includes('8017')) {
+                        tintColor = 'rgba(100, 60, 30, 0.5)'; // Legno
+                    } else if (finishValue.includes('nero')) {
+                        tintColor = 'rgba(20, 20, 20, 0.55)'; // Nero opaco
                     }
+
+                    // 5. Applicazione della finitura direttamente sui pixel originali (preserva le fughe e la texture)
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(boxX, boxY, boxW, boxH);
+                    ctx.clip();
+
+                    ctx.globalCompositeOperation = 'overlay';
+                    ctx.fillStyle = tintColor;
+                    ctx.fillRect(boxX, boxY, boxW, boxH);
+                    ctx.restore();
 
                     setTimeout(() => {
                         // Mostra l'immagine trasformata nel riquadro "Dopo"
