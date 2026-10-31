@@ -41,7 +41,7 @@
         .form-section { display: none; margin-top: 15px; flex-direction: column; gap: 15px; border-top: 2px solid #e9ecef; padding-top: 20px; box-sizing: border-box; width: 100%; }
         .form-group { display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .form-group label { font-size: 13px; font-weight: 600; color: #2d3748; }
-        .form-group select, .form-group input[type="file"] { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; }
+        .form-group select, .form-group input[type="file"], .form-group textarea { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; background: #fff; color: #2d3748; box-sizing: border-box; width: 100%; font-family: inherit; }
 
         button.btn-primary { background: #111; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; width: 100%; }
         button.btn-primary:hover { background: #333; }
@@ -68,7 +68,7 @@
                 👋 <strong>Benvenuto in Visual INFIX®!</strong><br>
                 Il sistema offre <strong>2 simulazioni gratuite</strong> per testare il rendering dei serramenti e delle finiture INFIX®.<br>
                 1. Inserisci la tua email autorizzata qui sotto e verifica il codice OTP ricevuto per accedere.<br>
-                2. Carica la foto, scegli categoria e finitura per generare il confronto immediato <strong>Prima / Dopo</strong>.
+                2. Carica la foto, scegli categoria, finitura e indica eventuali note per generare il confronto <strong>Prima / Dopo</strong>.
             </div>
 
             <div id="free-trial-box">
@@ -179,6 +179,12 @@
                 </select>
             </div>
 
+            <!-- CAMPO DI TESTO LIBERO PER RICHIESTE PERSONALIZZATE -->
+            <div class="form-group">
+                <label for="customUserRequest">✏️ 4. Note o richiesta personalizzata (opzionale)</label>
+                <textarea id="customUserRequest" rows="2" placeholder="Es. Richiesta specifica per il cliente, dettagli sui pannelli, maniglia particolare..."></textarea>
+            </div>
+
             <button type="submit" class="btn-primary" id="generateBtn">Genera Simulazione Visual INFIX® 🎨</button>
         </form>
 
@@ -196,6 +202,7 @@
         <div id="resultArea" class="result-box">
             <h3 style="margin-top:0; color:#111; font-size: 1.3rem;">Confronto Visual INFIX®</h3>
             <p id="resultSubtitle" style="font-size: 12px; color: #666; font-weight: bold;"></p>
+            <p id="resultCustomNote" style="font-size: 12px; color: #444; font-style: italic; margin-top: 4px;"></p>
             
             <div class="comparison-grid">
                 <div class="comparison-item">
@@ -407,8 +414,8 @@
             const productSelect = document.getElementById('productSelect');
             const product = productSelect.options[productSelect.selectedIndex].text;
             const finishSelect = document.getElementById('finishSelect');
-            const finishValue = finishSelect.value;
             const finish = finishSelect.options[finishSelect.selectedIndex].text;
+            const customRequest = document.getElementById('customUserRequest').value.trim();
 
             if (!file) {
                 alert("Per favore, seleziona o scatta prima una foto!");
@@ -416,63 +423,31 @@
             }
 
             const generateBtn = document.getElementById('generateBtn');
-            generateBtn.innerText = "Elaborazione simulazione AI in corso... 🎨";
+            generateBtn.innerText = "Elaborazione simulazione in corso... 🎨";
             generateBtn.disabled = true;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    
-                    // 1. Mostra la foto originale nello "Stato Attuale (Prima)"
+                setTimeout(() => {
+                    // Mostra la foto originale nel Prima e l'anteprima pulita nel Dopo
                     document.getElementById('beforeImage').src = e.target.result;
+                    document.getElementById('afterImage').src = e.target.result;
 
-                    // 2. Disegna l'immagine base del "Prima"
-                    ctx.drawImage(img, 0, 0);
-
-                    // 3. Coordinate dell'area centrale del portone/serramento
-                    const boxX = canvas.width * 0.22;
-                    const boxY = canvas.height * 0.40;
-                    const boxW = canvas.width * 0.56;
-                    const boxH = canvas.height * 0.50;
-
-                    // 4. Colore di tintura in base alla finitura scelta (trasparente/sovrapposto per mantenere ombre e texture)
-                    let tintColor = 'rgba(255, 255, 255, 0.45)'; // Bianco Puro
-                    if (finishValue.includes('7016') || finishValue.includes('argento')) {
-                        tintColor = 'rgba(70, 80, 90, 0.5)'; // Antracite
-                    } else if (finishValue.includes('noce') || finishValue.includes('rovere') || finishValue.includes('8017')) {
-                        tintColor = 'rgba(100, 60, 30, 0.5)'; // Legno
-                    } else if (finishValue.includes('nero')) {
-                        tintColor = 'rgba(20, 20, 20, 0.55)'; // Nero opaco
+                    document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
+                    
+                    if (customRequest) {
+                        document.getElementById('resultCustomNote').innerText = `Note cliente: "${customRequest}"`;
+                        document.getElementById('resultCustomNote').style.display = 'block';
+                    } else {
+                        document.getElementById('resultCustomNote').style.display = 'none';
                     }
 
-                    // 5. Applicazione della finitura direttamente sui pixel originali (preserva le fughe e la texture)
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.rect(boxX, boxY, boxW, boxH);
-                    ctx.clip();
+                    document.getElementById('resultArea').style.display = 'block';
+                    generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
+                    generateBtn.disabled = false;
 
-                    ctx.globalCompositeOperation = 'overlay';
-                    ctx.fillStyle = tintColor;
-                    ctx.fillRect(boxX, boxY, boxW, boxH);
-                    ctx.restore();
-
-                    setTimeout(() => {
-                        // Mostra l'immagine trasformata nel riquadro "Dopo"
-                        document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
-                        document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
-                        document.getElementById('resultArea').style.display = 'block';
-                        generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
-                        generateBtn.disabled = false;
-
-                        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
-                    }, 1000);
-                };
+                    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+                }, 1000);
             };
             reader.readAsDataURL(file);
         });
