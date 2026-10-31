@@ -8,7 +8,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-// Configurazione SMTP (usa le stesse credenziali della Bussola)
+// Configurazione SMTP identica a quella funzionante della Bussola
 const transporter = nodemailer.createTransport({
     host: 'smtp-relay.brevo.com',
     port: 587,
