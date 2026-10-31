@@ -1,15 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Replicate = require('replicate');
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '20mb' }));
+app.use(express.json({ limit: '20mb' })); // Permette l'invio di immagini ad alta risoluzione
 
 const PORT = process.env.PORT || 3000;
 const otpStore = new Map();
 
+// Inizializzazione Replicate con la chiave inserita su Render
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
@@ -18,22 +20,27 @@ function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+// ==========================================
 // 1. ENDPOINT: INVIO OTP (via Brevo)
+// ==========================================
 app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
+
   if (!email || !email.includes('@')) {
     return res.status(400).json({ error: "Indirizzo email non valido." });
   }
 
   const apiKey = process.env.BREVO_API_KEY;
+
   if (!apiKey) {
     return res.status(500).json({ error: "API Key mancante su Render." });
   }
 
   const otpCode = generateOtp();
+  
   otpStore.set(email.toLowerCase(), {
     code: otpCode,
-    expiresAt: Date.now() + 10 * 60 * 1000
+    expiresAt: Date.now() + 10 * 60 * 1000 // Scadenza 10 minuti
   });
 
   const data = JSON.stringify({
@@ -65,6 +72,7 @@ app.post('/api/send-otp', (req, res) => {
     let body = '';
     brevoRes.on('data', (chunk) => body += chunk);
     brevoRes.on('end', () => {
+      console.log(`Risposta Brevo (Status ${brevoRes.statusCode}):`, body);
       if (brevoRes.statusCode >= 200 && brevoRes.statusCode < 300) {
         return res.json({ success: true, message: "OTP inviato con successo." });
       } else {
@@ -74,6 +82,7 @@ app.post('/api/send-otp', (req, res) => {
   });
 
   brevoReq.on('error', (error) => {
+    console.error("Errore di rete:", error);
     return res.status(500).json({ error: "Errore interno del server." });
   });
 
@@ -81,14 +90,18 @@ app.post('/api/send-otp', (req, res) => {
   brevoReq.end();
 });
 
+// ==========================================
 // 2. ENDPOINT: VERIFICA OTP
+// ==========================================
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
+
   if (!email || !otp) {
     return res.status(400).json({ error: "Dati mancanti." });
   }
 
   const record = otpStore.get(email.toLowerCase());
+
   if (!record || Date.now() > record.expiresAt) {
     return res.status(400).json({ error: "Codice OTP errato o scaduto." });
   }
@@ -101,7 +114,9 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// 3. ENDPOINT: GENERAZIONE VISIVA ROBUSTA CON FALLBACK DI SICUREZZA
+// ==========================================
+// 3. ENDPOINT: GENERAZIONE VISIVA REALE (Replicate)
+// ==========================================
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -110,52 +125,37 @@ app.post('/api/visual-generate', async (req, res) => {
       return res.status(400).json({ error: "Nessuna immagine fornita." });
     }
 
+    // Formattazione data URI dell'immagine originale per Replicate
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
-    let resultImageUrl = null;
 
-    try {
-      const promptText = `Professional architectural photography, modifying doors and windows to finish: ${finish}. ${userPrompt || ''}`;
-      
-      const output = await replicate.run(
-        "black-forest-labs/flux-dev",
-        {
-          input: {
-            image: imageUri,
-            prompt: promptText,
-            guidance: 3.5,
-            num_outputs: 1,
-            output_format: "jpg",
-            output_quality: 90
-          }
+    // Prompt ultra-specifico per l'inpainting dei portoni / serramenti
+    const promptText = `Professional architectural photography, replace the old sectional garage doors with new modern sectional garage doors in finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures, architectural lighting.`;
+
+    // Esecuzione trasformazione grafica con modello FLUX Fill e parametri ottimizzati
+    const output = await replicate.run(
+      "black-forest-labs/flux-fill-pro",
+      {
+        input: {
+          image: imageUri,
+          prompt: promptText,
+          steps: 35,
+          guidance: 35
         }
-      );
-
-      console.log("Risposta grezza da Replicate:", JSON.stringify(output));
-
-      if (typeof output === 'string') {
-        resultImageUrl = output;
-      } else if (Array.isArray(output) && output.length > 0) {
-        resultImageUrl = typeof output[0] === 'string' ? output[0] : (output[0].url || null);
-      } else if (output && typeof output === 'object') {
-        resultImageUrl = output.url || null;
       }
-    } catch (apiError) {
-      console.log("Replicate ha riscontrato un limite o un errore, attivazione fallback:", apiError.message);
-    }
+    );
 
-    // FALLBACK DI SICUREZZA: se Replicate restituisce vuoto o fallisce, usiamo l'immagine originale
-    if (!resultImageUrl) {
-      resultImageUrl = imageUri;
-    }
+    // Recupero dell'URL dell'immagine generata
+    const resultImageUrl = Array.isArray(output) ? output[0] : output;
 
     res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
-    console.error("Errore generale:", error);
-    res.status(500).json({ success: false, error: "Errore durante la elaborazione: " + error.message });
+    console.error("Errore generazione grafica Replicate:", error);
+    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica visiva." });
   }
 });
 
+// Health check endpoint per Render
 app.get('/healthz', (req, res) => res.send('OK'));
 
 app.listen(PORT, () => {
