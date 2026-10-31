@@ -385,7 +385,8 @@
             }
         }
 
-        document.getElementById('visualForm').addEventListener('submit', function(e) {
+        // GESTIONE INVIO MODULO E CHIAMATA REALE AL BACKEND REPLICATE
+        document.getElementById('visualForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const email = localStorage.getItem('infix_visual_user_email');
@@ -423,31 +424,54 @@
             }
 
             const generateBtn = document.getElementById('generateBtn');
-            generateBtn.innerText = "Elaborazione simulazione in corso... 🎨";
+            generateBtn.innerText = "Elaborazione intelligenza artificiale in corso... 🎨⏳";
             generateBtn.disabled = true;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
-                setTimeout(() => {
-                    // Mostra la foto originale nel Prima e l'anteprima pulita nel Dopo
-                    document.getElementById('beforeImage').src = e.target.result;
-                    document.getElementById('afterImage').src = e.target.result;
+            reader.onload = async function(e) {
+                const base64Full = e.target.result;
+                const mimeType = base64Full.substring(base64Full.indexOf(":") + 1, base64Full.indexOf(";"));
+                const base64Data = base64Full.split(',')[1];
 
-                    document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
-                    
-                    if (customRequest) {
-                        document.getElementById('resultCustomNote').innerText = `Note cliente: "${customRequest}"`;
-                        document.getElementById('resultCustomNote').style.display = 'block';
+                document.getElementById('beforeImage').src = base64Full;
+
+                try {
+                    const response = await fetch(`${RENDER_BACKEND_URL}/api/visual-generate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            imageBase64: base64Data,
+                            mimeType: mimeType,
+                            finish: finish,
+                            userPrompt: `Category: ${product}. ${customRequest}`
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.imageUrl) {
+                        document.getElementById('afterImage').src = data.imageUrl;
+                        document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
+                        
+                        if (customRequest) {
+                            document.getElementById('resultCustomNote').innerText = `Note cliente: "${customRequest}"`;
+                            document.getElementById('resultCustomNote').style.display = 'block';
+                        } else {
+                            document.getElementById('resultCustomNote').style.display = 'none';
+                        }
+
+                        document.getElementById('resultArea').style.display = 'block';
+                        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
                     } else {
-                        document.getElementById('resultCustomNote').style.display = 'none';
+                        alert("Errore dal server di generazione: " + (data.error || "Impossibile completare il rendering."));
                     }
-
-                    document.getElementById('resultArea').style.display = 'block';
+                } catch (err) {
+                    console.error(err);
+                    alert("Errore di connessione durante la generazione grafica con l'IA.");
+                } finally {
                     generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
                     generateBtn.disabled = false;
-
-                    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
-                }, 1000);
+                }
             };
             reader.readAsDataURL(file);
         });
