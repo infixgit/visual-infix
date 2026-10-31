@@ -405,8 +405,10 @@
             const fileInput = document.getElementById('photoInput');
             const file = fileInput.files[0];
             const productSelect = document.getElementById('productSelect');
+            const productVal = productSelect.value;
             const product = productSelect.options[productSelect.selectedIndex].text;
             const finishSelect = document.getElementById('finishSelect');
+            const finishValue = finishSelect.value;
             const finish = finishSelect.options[finishSelect.selectedIndex].text;
 
             if (!file) {
@@ -428,32 +430,60 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                     
-                    // Mostra la foto originale nel "Prima"
+                    // 1. Mostra la foto originale nello "Stato Attuale (Prima)"
                     document.getElementById('beforeImage').src = e.target.result;
 
-                    // Disegna l'immagine base
+                    // 2. Disegna l'immagine base del "Prima"
                     ctx.drawImage(img, 0, 0);
 
-                    // Applica l'effetto visivo sul "Dopo" in base alla finitura selezionata
-                    const finishValue = finishSelect.value;
-                    ctx.globalCompositeOperation = 'source-atop';
-                    
-                    if (finishValue.includes('ral9010') || finishValue.includes('bianco')) {
-                        ctx.fillStyle = 'rgba(245, 245, 245, 0.3)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    } else if (finishValue.includes('7016') || finishValue.includes('argento')) {
-                        ctx.fillStyle = 'rgba(90, 100, 110, 0.35)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    // 3. Selezione del colore di finitura INFIX®
+                    let hexColor = '#f8f9fa'; // Default Bianco Puro
+                    if (finishValue.includes('7016') || finishValue.includes('argento')) {
+                        hexColor = '#374151'; // Antracite / Grigio
                     } else if (finishValue.includes('noce') || finishValue.includes('rovere') || finishValue.includes('8017')) {
-                        ctx.fillStyle = 'rgba(110, 65, 35, 0.35)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    } else {
-                        ctx.fillStyle = 'rgba(25, 25, 25, 0.4)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        hexColor = '#5c3a21'; // Legno / Marrone
+                    } else if (finishValue.includes('6005')) {
+                        hexColor = '#1b4332'; // Verde persiana
+                    } else if (finishValue.includes('nero')) {
+                        hexColor = '#111827'; // Nero opaco
+                    }
+
+                    // 4. Rendering adattivo in base al prodotto selezionato
+                    const boxX = canvas.width * 0.22;
+                    const boxY = canvas.height * 0.40;
+                    const boxW = canvas.width * 0.56;
+                    const boxH = canvas.height * 0.50;
+
+                    ctx.fillStyle = hexColor;
+                    ctx.fillRect(boxX, boxY, boxW, boxH);
+
+                    // Dettagli specifici per tipo di prodotto
+                    ctx.strokeStyle = finishValue.includes('9010') ? '#d1d5db' : '#1f2937';
+                    ctx.lineWidth = Math.max(2, canvas.width / 250);
+                    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+                    if (productVal === 'sezionale' || productVal === 'basculante') {
+                        // Linee orizzontali per portoni garage
+                        const numPanels = productVal === 'sezionale' ? 4 : 5;
+                        for (let i = 1; i < numPanels; i++) {
+                            let lineY = boxY + (boxH / numPanels) * i;
+                            ctx.beginPath();
+                            ctx.moveTo(boxX, lineY);
+                            ctx.lineTo(boxX + boxW, lineY);
+                            ctx.stroke();
+                        }
+                    } else if (productVal === 'serramento' || productVal === 'persiana') {
+                        // Griglia verticale/orizzontale per finestre o persiane
+                        ctx.beginPath();
+                        ctx.moveTo(boxX + boxW / 2, boxY);
+                        ctx.lineTo(boxX + boxW / 2, boxY + boxH);
+                        ctx.moveTo(boxX, boxY + boxH / 2);
+                        ctx.lineTo(boxX + boxW, boxY + boxH / 2);
+                        ctx.stroke();
                     }
 
                     setTimeout(() => {
-                        // Mostra l'immagine trasformata nel "Dopo"
+                        // Mostra l'immagine trasformata nel riquadro "Dopo"
                         document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
                         document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
                         document.getElementById('resultArea').style.display = 'block';
