@@ -1,22 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-
-// Configurazione SMTP identica a quella funzionante della Bussola
-const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    auth: {
-        user: process.env.SMTP_USER || process.env.SENDER_EMAIL || 'infixserramenti@gmail.it',
-        pass: process.env.BREVO_API_KEY
-    }
-});
 
 // Memoria temporanea in-memory per gli OTP
 const otpStore = new Map();
@@ -32,6 +22,15 @@ app.post('/api/send-otp', async (req, res) => {
     return res.status(400).json({ error: "Indirizzo email non valido." });
   }
 
+  // Prende la chiave da BREVO_API_KEY o come fallback da SMTP_USER se contiene una chiave
+  const apiKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.SENDER_EMAIL || process.env.SMTP_USER || 'infixserramenti@gmail.it';
+
+  if (!apiKey) {
+    console.error("Errore: BREVO_API_KEY non trovata nelle variabili d'ambiente.");
+    return res.status(500).json({ error: "Configurazione server incompleta (API Key mancante)." });
+  }
+
   const otpCode = generateOtp();
   otpStore.set(email.toLowerCase(), {
     code: otpCode,
@@ -39,22 +38,37 @@ app.post('/api/send-otp', async (req, res) => {
   });
 
   try {
-    await transporter.sendMail({
-      from: `"Visual INFIX®" <${process.env.SMTP_USER || process.env.SENDER_EMAIL || 'infixserramenti@gmail.it'}>`,
-      to: email,
-      subject: 'Il tuo codice OTP - Visual INFIX®',
-      html: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-        <h2>Accesso Autorizzato Visual INFIX®</h2>
-        <p>Il tuo codice OTP di verifica è:</p>
-        <h1 style="color: #2e7d32; letter-spacing: 3px;">${otpCode}</h1>
-        <p>Il codice scadrà tra 10 minuti.</p>
-      </div>`
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': apiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: { name: 'Visual INFIX®', email: senderEmail },
+        to: [{ email: email }],
+        subject: 'Il tuo codice OTP - Visual INFIX®',
+        htmlContent: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+          <h2>Accesso Autorizzato Visual INFIX®</h2>
+          <p>Il tuo codice OTP di verifica è:</p>
+          <h1 style="color: #2e7d32; letter-spacing: 3px;">${otpCode}</h1>
+          <p>Il codice scadrà tra 10 minuti.</p>
+        </div>`
+      })
     });
 
-    return res.json({ success: true, message: "OTP inviato con successo." });
+    const errData = await response.json();
+
+    if (response.ok) {
+      return res.json({ success: true, message: "OTP inviato con successo." });
+    } else {
+      console.error("Errore Brevo:", errData);
+      return res.status(500).json({ error: "Errore nell'invio della mail tramite Brevo." });
+    }
   } catch (error) {
-    console.error("Errore SMTP/Brevo:", error);
-    return res.status(500).json({ error: "Errore nell'invio della mail tramite Brevo." });
+    console.error("Errore Server:", error);
+    return res.status(500).json({ error: "Errore interno del server." });
   }
 });
 
