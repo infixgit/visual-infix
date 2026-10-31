@@ -128,18 +128,18 @@ app.post('/api/visual-generate', async (req, res) => {
     // Formattazione data URI dell'immagine originale per Replicate
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
 
-    // Prompt strutturato per l'inpainting fotorealistico dei serramenti
-    const promptText = `A high quality architectural photo of the building, replacing the door or window with finish: ${finish}. ${userPrompt || ''}, realistic lighting, architectural detail, 8k photo.`;
+    // Prompt ultra-specifico per l'inpainting dei portoni / serramenti
+    const promptText = `Professional architectural photography, replace the old sectional garage doors with new modern sectional garage doors in finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures, architectural lighting.`;
 
-    // Esecuzione trasformazione grafica con modello FLUX Fill
+    // Esecuzione trasformazione grafica con modello FLUX Fill e parametri ottimizzati
     const output = await replicate.run(
       "black-forest-labs/flux-fill-pro",
       {
         input: {
           image: imageUri,
           prompt: promptText,
-          steps: 30,
-          guidance: 30
+          steps: 35,
+          guidance: 35
         }
       }
     );
