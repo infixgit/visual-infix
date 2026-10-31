@@ -101,7 +101,7 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// 3. ENDPOINT: GENERAZIONE VISIVA REALE
+// 3. ENDPOINT: GENERAZIONE VISIVA ROBUSTA
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -111,7 +111,6 @@ app.post('/api/visual-generate', async (req, res) => {
     }
 
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
-
     const promptText = `Professional architectural photography of the building, modifying the doors and windows to match finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures.`;
 
     const output = await replicate.run(
@@ -128,13 +127,21 @@ app.post('/api/visual-generate', async (req, res) => {
       }
     );
 
-    const resultImageUrl = Array.isArray(output) ? output[0] : output;
-    
-    if (!resultImageUrl) {
-      return res.status(500).json({ success: false, error: "Nessun URL restituito da Replicate." });
+    console.log("Risposta grezza da Replicate:", JSON.stringify(output));
+
+    let resultImageUrl = null;
+    if (typeof output === 'string') {
+      resultImageUrl = output;
+    } else if (Array.isArray(output) && output.length > 0) {
+      resultImageUrl = output[0].url || output[0];
+    } else if (output && typeof output === 'object') {
+      resultImageUrl = output.url || (output.output && output.output[0]);
     }
 
-    // Inviamo sia imageUrl che result per garantire la massima compatibilità con qualsiasi versione del frontend
+    if (!resultImageUrl) {
+      return res.status(500).json({ success: false, error: "Formato di risposta non valido ricevuto da Replicate." });
+    }
+
     res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
