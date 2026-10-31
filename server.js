@@ -2,23 +2,26 @@ const express = require('express');
 const cors = require('cors');
 const https = require('https');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Replicate = require('replicate');
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); // Limite aumentato per gestire le foto in base64
+app.use(express.json({ limit: '20mb' })); // Permette l'invio di immagini ad alta risoluzione
 
 const PORT = process.env.PORT || 3000;
 const otpStore = new Map();
 
-// Inizializzazione del motore grafico Visual INFIX con chiave dedicata
-const visualGenAI = new GoogleGenerativeAI(process.env.GEMINI_VISUAL_API_KEY);
+// Inizializzazione Replicate con la chiave inserita su Render
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN,
+});
 
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 // ==========================================
-// ENDPOINT: INVIO OTP (Tuo codice attuale)
+// 1. ENDPOINT: INVIO OTP (via Brevo)
 // ==========================================
 app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
@@ -37,7 +40,7 @@ app.post('/api/send-otp', (req, res) => {
   
   otpStore.set(email.toLowerCase(), {
     code: otpCode,
-    expiresAt: Date.now() + 10 * 60 * 1000
+    expiresAt: Date.now() + 10 * 60 * 1000 // Scadenza 10 minuti
   });
 
   const data = JSON.stringify({
@@ -88,7 +91,7 @@ app.post('/api/send-otp', (req, res) => {
 });
 
 // ==========================================
-// ENDPOINT: VERIFICA OTP (Tuo codice attuale)
+// 2. ENDPOINT: VERIFICA OTP
 // ==========================================
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
@@ -112,37 +115,47 @@ app.post('/api/verify-otp', (req, res) => {
 });
 
 // ==========================================
-// ENDPOINT: VISUAL INFIX (Nuovo motore grafico)
+// 3. ENDPOINT: GENERAZIONE VISIVA REALE (Replicate)
 // ==========================================
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
 
-    const model = visualGenAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      systemInstruction: "Sei il motore grafico di Visual INFIX®. Il tuo compito è analizzare la foto caricata dell'involucro edilizio (serramento, portone sezionale, basculante, persiana o porta) e guidare la trasformazione fotorealistica applicando la finitura specificata dall'utente, mantenendo inalterati il contesto architettonico, le pareti, la luce naturale e le proporzioni originali."
-    });
+    if (!imageBase64) {
+      return res.status(400).json({ error: "Nessuna immagine fornita." });
+    }
 
-    const promptText = `Applicare la finitura: ${finish}. Indicazioni aggiuntive del cliente: ${userPrompt || 'Nessuna nota aggiuntiva'}`;
+    // Formattazione data URI dell'immagine originale per Replicate
+    const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
 
-    const imagePart = {
-      inlineData: {
-        data: imageBase64,
-        mimeType: mimeType || 'image/jpeg'
+    // Prompt strutturato per l'inpainting fotorealistico dei serramenti
+    const promptText = `A high quality architectural photo of the building, replacing the door or window with finish: ${finish}. ${userPrompt || ''}, realistic lighting, architectural detail, 8k photo.`;
+
+    // Esecuzione trasformazione grafica con modello FLUX Fill
+    const output = await replicate.run(
+      "black-forest-labs/flux-fill-pro",
+      {
+        input: {
+          image: imageUri,
+          prompt: promptText,
+          steps: 30,
+          guidance: 30
+        }
       }
-    };
+    );
 
-    const result = await model.generateContent([promptText, imagePart]);
-    const response = await result.response;
-    
-    res.json({ success: true, result: response.text() });
+    // Recupero dell'URL dell'immagine generata
+    const resultImageUrl = Array.isArray(output) ? output[0] : output;
+
+    res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
-    console.error("Errore Visual INFIX:", error);
-    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica." });
+    console.error("Errore generazione grafica Replicate:", error);
+    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica visiva." });
   }
 });
 
+// Health check endpoint per Render
 app.get('/healthz', (req, res) => res.send('OK'));
 
 app.listen(PORT, () => {
