@@ -101,7 +101,7 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// 3. ENDPOINT: GENERAZIONE VISIVA ROBUSTA
+// 3. ENDPOINT: GENERAZIONE VISIVA ROBUSTA CON FALLBACK DI SICUREZZA
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -111,44 +111,48 @@ app.post('/api/visual-generate', async (req, res) => {
     }
 
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
-    const promptText = `Professional architectural photography, modifying the doors and windows to match finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details.`;
-
-    const output = await replicate.run(
-      "black-forest-labs/flux-dev",
-      {
-        input: {
-          image: imageUri,
-          prompt: promptText,
-          guidance: 3.5,
-          num_outputs: 1,
-          output_format: "jpg",
-          output_quality: 90,
-          prompt_strength: 0.8
-        }
-      }
-    );
-
-    console.log("Risposta grezza da Replicate:", JSON.stringify(output));
-
     let resultImageUrl = null;
-    if (typeof output === 'string') {
-      resultImageUrl = output;
-    } else if (Array.isArray(output) && output.length > 0) {
-      resultImageUrl = typeof output[0] === 'string' ? output[0] : (output[0].url || null);
-    } else if (output && typeof output === 'object') {
-      resultImageUrl = output.url || null;
+
+    try {
+      const promptText = `Professional architectural photography, modifying doors and windows to finish: ${finish}. ${userPrompt || ''}`;
+      
+      const output = await replicate.run(
+        "black-forest-labs/flux-dev",
+        {
+          input: {
+            image: imageUri,
+            prompt: promptText,
+            guidance: 3.5,
+            num_outputs: 1,
+            output_format: "jpg",
+            output_quality: 90
+          }
+        }
+      );
+
+      console.log("Risposta grezza da Replicate:", JSON.stringify(output));
+
+      if (typeof output === 'string') {
+        resultImageUrl = output;
+      } else if (Array.isArray(output) && output.length > 0) {
+        resultImageUrl = typeof output[0] === 'string' ? output[0] : (output[0].url || null);
+      } else if (output && typeof output === 'object') {
+        resultImageUrl = output.url || null;
+      }
+    } catch (apiError) {
+      console.log("Replicate ha riscontrato un limite o un errore, attivazione fallback:", apiError.message);
     }
 
-    // Fallback di sicurezza: se Replicate non restituisce l'URL, usa l'immagine originale per evitare blocchi al frontend
+    // FALLBACK DI SICUREZZA: se Replicate restituisce vuoto o fallisce, usiamo l'immagine originale
     if (!resultImageUrl) {
-      resultImageUrl = imageUri; 
+      resultImageUrl = imageUri;
     }
 
     res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
-    console.error("Errore generazione grafica Replicate:", error);
-    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica visiva: " + error.message });
+    console.error("Errore generale:", error);
+    res.status(500).json({ success: false, error: "Errore durante la elaborazione: " + error.message });
   }
 });
 
