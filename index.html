@@ -226,7 +226,6 @@
     </div>
 
     <script>
-        // URL corretto del backend su Render per visual-infix
         const RENDER_BACKEND_URL = 'https://visual-infix.onrender.com';
         let currentOtpEmail = '';
 
@@ -421,19 +420,50 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                setTimeout(() => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // Mostra la foto originale nel "Prima"
                     document.getElementById('beforeImage').src = e.target.result;
-                    document.getElementById('afterImage').src = e.target.result;
 
-                    document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
-                    document.getElementById('resultArea').style.display = 'block';
-                    generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
-                    generateBtn.disabled = false;
+                    // Disegna l'immagine base
+                    ctx.drawImage(img, 0, 0);
 
-                    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
-                }, 1200);
+                    // Applica l'effetto visivo sul "Dopo" in base alla finitura selezionata
+                    const finishValue = finishSelect.value;
+                    ctx.globalCompositeOperation = 'source-atop';
+                    
+                    if (finishValue.includes('ral9010') || finishValue.includes('bianco')) {
+                        ctx.fillStyle = 'rgba(245, 245, 245, 0.3)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    } else if (finishValue.includes('7016') || finishValue.includes('argento')) {
+                        ctx.fillStyle = 'rgba(90, 100, 110, 0.35)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    } else if (finishValue.includes('noce') || finishValue.includes('rovere') || finishValue.includes('8017')) {
+                        ctx.fillStyle = 'rgba(110, 65, 35, 0.35)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    } else {
+                        ctx.fillStyle = 'rgba(25, 25, 25, 0.4)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
+
+                    setTimeout(() => {
+                        // Mostra l'immagine trasformata nel "Dopo"
+                        document.getElementById('afterImage').src = canvas.toDataURL('image/jpeg');
+                        document.getElementById('resultSubtitle').innerText = `Categoria: ${product} | Finitura: ${finish}`;
+                        document.getElementById('resultArea').style.display = 'block';
+                        generateBtn.innerText = "Genera Simulazione Visual INFIX® 🎨";
+                        generateBtn.disabled = false;
+
+                        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+                    }, 1000);
+                };
             };
-
             reader.readAsDataURL(file);
         });
 
