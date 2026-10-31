@@ -21,7 +21,6 @@ app.post('/api/send-otp', (req, res) => {
   }
 
   const apiKey = process.env.BREVO_API_KEY;
-  // Usa un'email mittente sicuramente verificata su Brevo (es. quella usata per la Bussola o l'account)
   const senderEmail = process.env.SENDER_EMAIL || process.env.SMTP_USER || 'infix@outlook.it';
 
   if (!apiKey) {
@@ -81,7 +80,6 @@ app.post('/api/send-otp', (req, res) => {
 });
 
 app.post('/api/verify-otp', (req, res) => {
-  The rest of verify-otp...
   const { email, otp } = req.body;
 
   if (!email || !otp) {
