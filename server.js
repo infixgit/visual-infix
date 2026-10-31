@@ -1,17 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Replicate = require('replicate');
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '20mb' })); // Permette l'invio di immagini ad alta risoluzione
+app.use(express.json({ limit: '20mb' }));
 
 const PORT = process.env.PORT || 3000;
 const otpStore = new Map();
 
-// Inizializzazione Replicate con la chiave inserita su Render
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
@@ -20,27 +18,22 @@ function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// ==========================================
 // 1. ENDPOINT: INVIO OTP (via Brevo)
-// ==========================================
 app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
-
   if (!email || !email.includes('@')) {
     return res.status(400).json({ error: "Indirizzo email non valido." });
   }
 
   const apiKey = process.env.BREVO_API_KEY;
-
   if (!apiKey) {
     return res.status(500).json({ error: "API Key mancante su Render." });
   }
 
   const otpCode = generateOtp();
-  
   otpStore.set(email.toLowerCase(), {
     code: otpCode,
-    expiresAt: Date.now() + 10 * 60 * 1000 // Scadenza 10 minuti
+    expiresAt: Date.now() + 10 * 60 * 1000
   });
 
   const data = JSON.stringify({
@@ -72,7 +65,6 @@ app.post('/api/send-otp', (req, res) => {
     let body = '';
     brevoRes.on('data', (chunk) => body += chunk);
     brevoRes.on('end', () => {
-      console.log(`Risposta Brevo (Status ${brevoRes.statusCode}):`, body);
       if (brevoRes.statusCode >= 200 && brevoRes.statusCode < 300) {
         return res.json({ success: true, message: "OTP inviato con successo." });
       } else {
@@ -82,7 +74,6 @@ app.post('/api/send-otp', (req, res) => {
   });
 
   brevoReq.on('error', (error) => {
-    console.error("Errore di rete:", error);
     return res.status(500).json({ error: "Errore interno del server." });
   });
 
@@ -90,18 +81,14 @@ app.post('/api/send-otp', (req, res) => {
   brevoReq.end();
 });
 
-// ==========================================
 // 2. ENDPOINT: VERIFICA OTP
-// ==========================================
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
-
   if (!email || !otp) {
     return res.status(400).json({ error: "Dati mancanti." });
   }
 
   const record = otpStore.get(email.toLowerCase());
-
   if (!record || Date.now() > record.expiresAt) {
     return res.status(400).json({ error: "Codice OTP errato o scaduto." });
   }
@@ -114,9 +101,7 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// ==========================================
-// 3. ENDPOINT: GENERAZIONE VISIVA REALE (Replicate Image-to-Image)
-// ==========================================
+// 3. ENDPOINT: GENERAZIONE VISIVA REALE CON FLUX DEV (Image-to-Image stabile)
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -125,37 +110,41 @@ app.post('/api/visual-generate', async (req, res) => {
       return res.status(400).json({ error: "Nessuna immagine fornita." });
     }
 
-    // Formattazione data URI dell'immagine originale per Replicate
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
 
-    // Prompt strutturato per Image-to-Image senza bisogno di maschera
-    const promptText = `A realistic high quality architectural photo of this building with new installed garage doors, in finish: ${finish}. ${userPrompt || ''}, realistic lighting, architectural detail, 8k photo.`;
+    // Prompt esplicito e orientato al cambiamento visivo
+    const promptText = `Professional architectural photography of the building, modifying the doors and windows to match finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures.`;
 
-    // Utilizzo del modello Image-to-Image (flux-1.1-pro / flux-dev)
+    // Utilizzo del modello flux-dev che accetta correttamente image e prompt_strength
     const output = await replicate.run(
-      "black-forest-labs/flux-1.1-pro",
+      "black-forest-labs/flux-dev",
       {
         input: {
           image: imageUri,
           prompt: promptText,
-          prompt_strength: 0.65, // Mantiene la struttura della casa cambiando lo stile dei serramenti
-          output_format: "jpg"
+          prompt_strength: 0.75,
+          num_outputs: 1,
+          aspect_ratio: "match_input_image",
+          output_format: "jpg",
+          output_quality: 90
         }
       }
     );
 
-    // Recupero dell'URL dell'immagine generata
     const resultImageUrl = Array.isArray(output) ? output[0] : output;
+    
+    if (!resultImageUrl) {
+      return res.status(500).json({ success: false, error: "Nessun URL restituito da Replicate." });
+    }
 
     res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
     console.error("Errore generazione grafica Replicate:", error);
-    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica visiva." });
+    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica visiva: " + error.message });
   }
 });
 
-// Health check endpoint per Render
 app.get('/healthz', (req, res) => res.send('OK'));
 
 app.listen(PORT, () => {
