@@ -101,7 +101,7 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// 3. ENDPOINT: GENERAZIONE VISIVA REALE CON FLUX DEV (Image-to-Image stabile)
+// 3. ENDPOINT: GENERAZIONE VISIVA CON PARAMETRI PULITI
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -112,10 +112,8 @@ app.post('/api/visual-generate', async (req, res) => {
 
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
 
-    // Prompt esplicito e orientato al cambiamento visivo
     const promptText = `Professional architectural photography of the building, modifying the doors and windows to match finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures.`;
 
-    // Utilizzo del modello flux-dev che accetta correttamente image e prompt_strength
     const output = await replicate.run(
       "black-forest-labs/flux-dev",
       {
@@ -124,7 +122,6 @@ app.post('/api/visual-generate', async (req, res) => {
           prompt: promptText,
           prompt_strength: 0.75,
           num_outputs: 1,
-          aspect_ratio: "match_input_image",
           output_format: "jpg",
           output_quality: 90
         }
