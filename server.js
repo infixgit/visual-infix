@@ -101,7 +101,7 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
-// 3. ENDPOINT: GENERAZIONE VISIVA CON PARAMETRI PULITI
+// 3. ENDPOINT: GENERAZIONE VISIVA REALE
 app.post('/api/visual-generate', async (req, res) => {
   try {
     const { userPrompt, finish, imageBase64, mimeType } = req.body;
@@ -134,6 +134,7 @@ app.post('/api/visual-generate', async (req, res) => {
       return res.status(500).json({ success: false, error: "Nessun URL restituito da Replicate." });
     }
 
+    // Inviamo sia imageUrl che result per garantire la massima compatibilità con qualsiasi versione del frontend
     res.json({ success: true, imageUrl: resultImageUrl, result: resultImageUrl });
 
   } catch (error) {
