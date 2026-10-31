@@ -115,7 +115,7 @@ app.post('/api/verify-otp', (req, res) => {
 });
 
 // ==========================================
-// 3. ENDPOINT: GENERAZIONE VISIVA REALE (Replicate)
+// 3. ENDPOINT: GENERAZIONE VISIVA REALE (Replicate Image-to-Image)
 // ==========================================
 app.post('/api/visual-generate', async (req, res) => {
   try {
@@ -128,18 +128,18 @@ app.post('/api/visual-generate', async (req, res) => {
     // Formattazione data URI dell'immagine originale per Replicate
     const imageUri = `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`;
 
-    // Prompt ultra-specifico per l'inpainting dei portoni / serramenti
-    const promptText = `Professional architectural photography, replace the old sectional garage doors with new modern sectional garage doors in finish: ${finish}. ${userPrompt || ''}, high-end residential renovation, crisp details, realistic textures, architectural lighting.`;
+    // Prompt strutturato per Image-to-Image senza bisogno di maschera
+    const promptText = `A realistic high quality architectural photo of this building with new installed garage doors, in finish: ${finish}. ${userPrompt || ''}, realistic lighting, architectural detail, 8k photo.`;
 
-    // Esecuzione trasformazione grafica con modello FLUX Fill e parametri ottimizzati
+    // Utilizzo del modello Image-to-Image (flux-1.1-pro / flux-dev)
     const output = await replicate.run(
-      "black-forest-labs/flux-fill-pro",
+      "black-forest-labs/flux-1.1-pro",
       {
         input: {
           image: imageUri,
           prompt: promptText,
-          steps: 35,
-          guidance: 35
+          prompt_strength: 0.65, // Mantiene la struttura della casa cambiando lo stile dei serramenti
+          output_format: "jpg"
         }
       }
     );
