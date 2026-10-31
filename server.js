@@ -1,18 +1,25 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Limite aumentato per gestire le foto in base64
 
 const PORT = process.env.PORT || 3000;
 const otpStore = new Map();
+
+// Inizializzazione del motore grafico Visual INFIX con chiave dedicata
+const visualGenAI = new GoogleGenerativeAI(process.env.GEMINI_VISUAL_API_KEY);
 
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+// ==========================================
+// ENDPOINT: INVIO OTP (Tuo codice attuale)
+// ==========================================
 app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
 
@@ -33,7 +40,6 @@ app.post('/api/send-otp', (req, res) => {
     expiresAt: Date.now() + 10 * 60 * 1000
   });
 
-  // Struttura payload identica a La Bussola (con replyTo attivo)
   const data = JSON.stringify({
     sender: { name: 'Visual INFIX®', email: 'infixserramenti@gmail.com' },
     replyTo: { email: 'infixserramenti@gmail.com', name: 'Visual INFIX®' },
@@ -81,6 +87,9 @@ app.post('/api/send-otp', (req, res) => {
   brevoReq.end();
 });
 
+// ==========================================
+// ENDPOINT: VERIFICA OTP (Tuo codice attuale)
+// ==========================================
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
 
@@ -99,6 +108,38 @@ app.post('/api/verify-otp', (req, res) => {
     return res.json({ success: true, message: "Verificato con successo!" });
   } else {
     return res.status(400).json({ error: "Codice OTP errato." });
+  }
+});
+
+// ==========================================
+// ENDPOINT: VISUAL INFIX (Nuovo motore grafico)
+// ==========================================
+app.post('/api/visual-generate', async (req, res) => {
+  try {
+    const { userPrompt, finish, imageBase64, mimeType } = req.body;
+
+    const model = visualGenAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      systemInstruction: "Sei il motore grafico di Visual INFIX®. Il tuo compito è analizzare la foto caricata dell'involucro edilizio (serramento, portone sezionale, basculante, persiana o porta) e guidare la trasformazione fotorealistica applicando la finitura specificata dall'utente, mantenendo inalterati il contesto architettonico, le pareti, la luce naturale e le proporzioni originali."
+    });
+
+    const promptText = `Applicare la finitura: ${finish}. Indicazioni aggiuntive del cliente: ${userPrompt || 'Nessuna nota aggiuntiva'}`;
+
+    const imagePart = {
+      inlineData: {
+        data: imageBase64,
+        mimeType: mimeType || 'image/jpeg'
+      }
+    };
+
+    const result = await model.generateContent([promptText, imagePart]);
+    const response = await result.response;
+    
+    res.json({ success: true, result: response.text() });
+
+  } catch (error) {
+    console.error("Errore Visual INFIX:", error);
+    res.status(500).json({ success: false, error: "Errore durante la trasformazione grafica." });
   }
 });
 
